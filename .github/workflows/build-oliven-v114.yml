@@ -1,0 +1,263 @@
+name: Build Oliven v1.0.14 APK
+
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Prepare Oliven v1.0.14 sources
+        run: |
+          rm -rf oliven_v114
+          mkdir -p oliven_v114/app/src/main/java/com/oliven/app
+          mkdir -p oliven_v114/app/src/main/res/drawable oliven_v114/app/src/main/res/values
+          python - <<'PY'
+          from pathlib import Path
+          import ast, base64, re, zlib
+
+          origem = Path('.github/workflows/build-oliven-v113-fixed.yml').read_text(encoding='utf-8')
+          m = re.search(r"chunks = \[\n(.*?)\n\s*\]", origem, re.S)
+          if not m:
+              raise SystemExit('Não encontrei os chunks da v1.0.13')
+          chunks = ast.literal_eval('[' + m.group(1) + ']')
+          java = zlib.decompress(base64.b64decode(''.join(chunks))).decode('utf-8')
+
+          java = java.replace('Calendar now = Calendar.getInstance(), shownMonth = Calendar.getInstance();', 'Calendar now = Calendar.getInstance(), shownMonth = Calendar.getInstance(), selectedDay = Calendar.getInstance();')
+          java = java.replace('shownMonth.set(Calendar.DAY_OF_MONTH,1);\n            loadHabits();', 'shownMonth.set(Calendar.DAY_OF_MONTH,1);\n            selectedDay = (Calendar) now.clone();\n            loadHabits();')
+          java = java.replace('c.set(y,m,d,12,0,0);', 'c.set(y,m,d,0,0,0);')
+          java = java.replace('String monthName(Calendar c){ return new SimpleDateFormat("MMMM yyyy", new Locale("pt","BR")).format(c.getTime()); }', 'String monthName(Calendar c){ return new SimpleDateFormat("MMMM yyyy", new Locale("pt","BR")).format(c.getTime()); }\n        boolean sameDay(Calendar a, Calendar b){ return a.get(Calendar.YEAR)==b.get(Calendar.YEAR) && a.get(Calendar.MONTH)==b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH)==b.get(Calendar.DAY_OF_MONTH); }\n        boolean future(Calendar c){ Calendar a=(Calendar)c.clone(); Calendar b=(Calendar)now.clone(); a.set(Calendar.HOUR_OF_DAY,0); a.set(Calendar.MINUTE,0); a.set(Calendar.SECOND,0); a.set(Calendar.MILLISECOND,0); b.set(Calendar.HOUR_OF_DAY,0); b.set(Calendar.MINUTE,0); b.set(Calendar.SECOND,0); b.set(Calendar.MILLISECOND,0); return a.after(b); }\n        String shortMonth(Calendar c){ return new SimpleDateFormat("MMM", new Locale("pt","BR")).format(c.getTime()).replace(".","").toUpperCase(); }')
+          java = java.replace('bottomTop = H - safeBottom - 74;\n            topBar = 64;', 'bottomTop = H - safeBottom - 62;\n            topBar = 56;')
+          java = java.replace('drawOlivenSymbol(c,18,14,32); text(c,"Oliven",58,38,17,TEXT,true);\n            iconButton(c,327,31,"◇",10,0); iconButton(c,363,31,"☰",1,0);', 'drawOlivenSymbol(c,18,12,30); text(c,"Oliven",55,35,16,TEXT,true);\n            iconButton(c,326,28,"◇",10,0); iconButton(c,362,28,"☰",1,0);')
+          java = java.replace('round(c,x,y,x+size,y+size,8,BLACK);\n            ', '')
+          java = java.replace('if(active) round(c,cx-44,bottomTop+10,cx+44,bottomTop+64,16,SOFT);\n                center(c,icons[i],cx,bottomTop+31,22,active?GREEN:MUTED,true);\n                center(c,labels[i],cx,bottomTop+54,10,active?GREEN:MUTED,active);\n                hit(cx-48,bottomTop+4,cx+48,bottomTop+70,2,i);', 'if(active) round(c,cx-43,bottomTop+7,cx+43,bottomTop+57,16,SOFT);\n                center(c,icons[i],cx,bottomTop+28,20,active?GREEN:MUTED,true);\n                center(c,labels[i],cx,bottomTop+50,9.5f,active?GREEN:MUTED,active);\n                hit(cx-48,bottomTop+2,cx+48,bottomTop+60,2,i);')
+          java = java.replace('float y=contentTop-scroll+35; center(c,"Progresso",195,y,18,TEXT,true);', 'float y=contentTop-scroll+33; text(c,"Progresso",20,y,22,TEXT,true);')
+          java = java.replace('float y=contentTop-scroll+35; center(c,"Perfil",195,y,18,TEXT,true);', 'float y=contentTop-scroll+33; text(c,"Perfil",20,y,22,TEXT,true);')
+          java = re.sub(r'Oliven 1\.0\.\d+', 'Oliven 1.0.14', java)
+
+          novo_home = r'''        void drawHome(Canvas c){
+            float y=contentTop+32;
+            header(c,"Olá, Jean.","16/08/2026 · Evolução pessoal",y);
+            int today=pct(now);
+            float cy=y+172;
+            drawSegmentCircle(c,195,cy,105,60,today,false);
+            center(c,today+"%",195,cy+10,36,TEXT,true);
+            center(c,"Consistência de hoje",195,cy+38,10.5f,MUTED,false);
+            hit(60,cy-114,330,cy+114,10,0);
+
+            float greenH=58;
+            float greenTop=bottomTop-greenH-10;
+            float top=cy+139;
+            float bottom=greenTop-14;
+            if(bottom-top<210) top=cy+124;
+            card(c,14,top,376,bottom,18);
+            text(c,"HOJE",28,top+31,12,TEXT,true);
+            right(c,doneMain(now)+" de "+mainCount()+" concluídos",358,top+31,11,GREEN,true);
+            float row=42;
+            float first=top+66;
+            for(int i=0;i<mainCount();i++){
+                float yy=first+i*row;
+                check(c,40,yy-3,done(now,i));
+                text(c,habits.get(i).name,58,yy-8,12.7f,TEXT,true);
+                text(c,habits.get(i).goal,58,yy+9,8.5f,MUTED,false);
+                hit(25,yy-22,365,yy+20,3,i);
+            }
+
+            round(c,14,greenTop,376,greenTop+greenH,16,SOFT);
+            text(c,"↗",30,greenTop+36,14,GREEN,true);
+            text(c,"Seu ritmo está ficando mais consistente",58,greenTop+29,11.7f,TEXT,true);
+            text(c,"Toque para ver Meu ano e insights",58,greenTop+46,8.4f,MUTED,false);
+            hit(14,greenTop,376,greenTop+greenH,10,1);
+            maxScroll=0;
+        }
+'''
+          java = re.sub(r'        void drawHome\(Canvas c\)\{.*?\n        void drawSegmentCircle', novo_home + '        void drawSegmentCircle', java, flags=re.S)
+
+          novo_segment = r'''        void drawSegmentCircle(Canvas c,float cx,float cy,float r,int seg,int value,boolean month){
+            RectF rr=new RectF(X(cx-r),Y(cy-r),X(cx+r),Y(cy+r));
+            p.setStyle(Paint.Style.STROKE);
+            p.setStrokeWidth(X(8.5f));
+            p.setStrokeCap(Paint.Cap.ROUND);
+            float percent=value/100f;
+            int filledSegments=Math.round(seg*percent);
+            for(int i=0;i<seg;i++){
+                float step=360f/seg;
+                float start=-90+i*step;
+                float sweep=step*.40f;
+                p.setColor(LIGHT);
+                c.drawArc(rr,start,sweep,false,p);
+                if(i<filledSegments){
+                    p.setColor(GREEN);
+                    c.drawArc(rr,start,sweep,false,p);
+                }
+            }
+        }
+'''
+          java = re.sub(r'        void drawSegmentCircle\(Canvas c,float cx,float cy,float r,int seg,int value,boolean month\)\{.*?\n        void check', novo_segment + '        void check', java, flags=re.S)
+
+          novo_calendario = r'''        void drawCalendarCircle(Canvas c){
+            float y=contentTop+28;
+            center(c,"Calendário e Círculo",195,y,16.5f,TEXT,true);
+            text(c,"‹",28,y+2,20,TEXT,false);
+            text(c,"›",354,y+2,20,TEXT,false);
+            hit(14,y-18,60,y+45,9,-1);
+            hit(330,y-18,380,y+45,9,1);
+            center(c,monthName(shownMonth),195,y+31,10.5f,TEXT,true);
+
+            float calTop=y+49;
+            float calH=160;
+            card(c,14,calTop,376,calTop+calH,16);
+            drawCalendar(c,32,calTop+25,358,calTop+calH-22,shownMonth);
+
+            float ringTop=calTop+calH+12;
+            float ringH=186;
+            card(c,14,ringTop,376,ringTop+ringH,16);
+            drawMonthRing(c,195,ringTop+ringH/2,72,shownMonth);
+
+            float consH=56;
+            float consTop=bottomTop-consH-9;
+            float habitsTop=ringTop+ringH+12;
+            float habitsH=consTop-habitsTop-10;
+            if(habitsH<112) habitsH=112;
+            card(c,14,habitsTop,376,habitsTop+habitsH,16);
+            text(c,"Hábitos do dia",28,habitsTop+28,12,TEXT,true);
+            right(c,doneMain(selectedDay)+" de "+mainCount()+" concluídos",358,habitsTop+28,10,GREEN,true);
+            float available=habitsH-48;
+            float row=Math.min(23, Math.max(17, available/Math.max(1,mainCount())));
+            float first=habitsTop+55;
+            for(int i=0;i<mainCount();i++){
+                float yy=first+i*row;
+                if(yy > habitsTop+habitsH-12) break;
+                check(c,36,yy-3,done(selectedDay,i));
+                text(c,habits.get(i).name,54,yy+1,11.2f,TEXT,true);
+                hit(22,yy-row*.55f,366,yy+row*.55f,12,i);
+            }
+
+            card(c,14,consTop,376,consTop+consH,16);
+            int mp=monthPct(shownMonth);
+            text(c,"Consistência do mês",28,consTop+29,12,TEXT,true);
+            right(c,mp<0?"-":mp+"%",346,consTop+36,20,GREEN,true);
+            text(c,"Baseada nos check-ins salvos",28,consTop+46,8.2f,MUTED,false);
+            maxScroll=0;
+        }
+'''
+          java = re.sub(r'        void drawCalendarCircle\(Canvas c\)\{.*?\n        void drawCalendar', novo_calendario + '        void drawCalendar', java, flags=re.S)
+
+          novo_draw_calendar = r'''        void drawCalendar(Canvas c,float l,float t,float r,float b,Calendar month){
+            String[] ds={"D","S","T","Q","Q","S","S"};
+            float cell=(r-l)/7f;
+            for(int i=0;i<7;i++) center(c,ds[i],l+cell*i+cell/2,t,8.2f,MUTED,false);
+            Calendar m=(Calendar)month.clone();
+            m.set(Calendar.DAY_OF_MONTH,1);
+            int first=m.get(Calendar.DAY_OF_WEEK)-1;
+            int max=m.getActualMaximum(Calendar.DAY_OF_MONTH);
+            float rowH=(b-t-18)/6f;
+            for(int d=1;d<=max;d++){
+                int pos=first+d-1;
+                int col=pos%7,row=pos/7;
+                float cx=l+cell*col+cell/2, cy=t+18+row*rowH;
+                Calendar day=cal(m.get(Calendar.YEAR),m.get(Calendar.MONTH),d);
+                int pc=pct(day);
+                boolean selected=sameDay(day,selectedDay);
+                if(!future(day) && (hasData(day) || pc>0 || selected)){
+                    int fill=selected ? SOFT : colorPct(pc);
+                    if(fill!=Color.TRANSPARENT) round(c,cx-12,cy-12,cx+12,cy+12,10,fill);
+                    if(pc>0 && !selected){
+                        p.setStyle(Paint.Style.STROKE);
+                        p.setStrokeWidth(X(1.5f));
+                        p.setColor(GREEN);
+                        c.drawCircle(X(cx),Y(cy),X(13),p);
+                    }
+                }
+                center(c,String.valueOf(d),cx,cy+4,8.5f,selected?GREEN:TEXT,selected || pc>=80);
+                hit(cx-cell/2+2,cy-rowH/2,cx+cell/2-2,cy+rowH/2,11,d);
+            }
+        }
+'''
+          java = re.sub(r'        void drawCalendar\(Canvas c,float l,float t,float r,float b,Calendar month\)\{.*?\n        void drawMonthRing', novo_draw_calendar + '        void drawMonthRing', java, flags=re.S)
+
+          novo_ring = r'''        void drawMonthRing(Canvas c,float cx,float cy,float r,Calendar month){
+            Calendar m=(Calendar)month.clone();
+            m.set(Calendar.DAY_OF_MONTH,1);
+            int max=m.getActualMaximum(Calendar.DAY_OF_MONTH);
+            RectF rr=new RectF(X(cx-r),Y(cy-r),X(cx+r),Y(cy+r));
+            p.setStyle(Paint.Style.STROKE);
+            p.setStrokeWidth(X(8.8f));
+            p.setStrokeCap(Paint.Cap.ROUND);
+            for(int d=1;d<=max;d++){
+                float step=360f/max;
+                float start=-90+(d-1)*step;
+                float sweep=step*.42f;
+                Calendar day=cal(m.get(Calendar.YEAR),m.get(Calendar.MONTH),d);
+                int pc=pct(day);
+                p.setColor(LIGHT);
+                c.drawArc(rr,start,sweep,false,p);
+                if(!future(day) && pc>0){
+                    p.setColor(GREEN2);
+                    c.drawArc(rr,start,sweep*(pc/100f),false,p);
+                }
+                double ang=Math.toRadians(start+sweep/2);
+                float lx=cx+(float)Math.cos(ang)*(r+18);
+                float ly=cy+(float)Math.sin(ang)*(r+18);
+                boolean sel=sameDay(day,selectedDay);
+                center(c,String.valueOf(d),lx,ly+3,5.8f,sel?GREEN:MUTED,sel);
+            }
+            p.setStyle(Paint.Style.FILL);
+            p.setColor(WHITE);
+            c.drawCircle(X(cx),Y(cy),X(49),p);
+            center(c,String.valueOf(selectedDay.get(Calendar.DAY_OF_MONTH)),cx,cy-2,29,TEXT,true);
+            center(c,shortMonth(selectedDay),cx,cy+22,9,MUTED,true);
+            center(c,pct(selectedDay)+"%",cx,cy+39,8.5f,GREEN,true);
+        }
+'''
+          java = re.sub(r'        void drawMonthRing\(Canvas c,float cx,float cy,float r,Calendar month\)\{.*?\n        void drawYearInsights', novo_ring + '        void drawYearInsights', java, flags=re.S)
+
+          novo_action = r'''        void action(int type,int idx){
+            if(type==1){ menu=true; invalidate(); return; }
+            if(type==2){ screen=idx; scroll=0; menu=false; invalidate(); return; }
+            if(type==3){ Calendar c=(Calendar)now.clone(); prefs.edit().putBoolean(key(c,habits.get(idx).id),!done(c,idx)).putBoolean(touched(c),true).apply(); invalidate(); return; }
+            if(type==5){ selectedPeriod=idx; invalidate(); return; }
+            if(type==6){ selectedCat=idx; scroll=0; invalidate(); return; }
+            if(type==7){ addHabit(); return; }
+            if(type==8){ screen=idx; scroll=0; menu=false; invalidate(); return; }
+            if(type==9){ shownMonth.add(Calendar.MONTH,idx); selectedDay=cal(shownMonth.get(Calendar.YEAR),shownMonth.get(Calendar.MONTH),Math.min(selectedDay.get(Calendar.DAY_OF_MONTH),shownMonth.getActualMaximum(Calendar.DAY_OF_MONTH))); scroll=0; invalidate(); return; }
+            if(type==10){ screen=idx; scroll=0; invalidate(); return; }
+            if(type==11){ selectedDay=cal(shownMonth.get(Calendar.YEAR),shownMonth.get(Calendar.MONTH),idx); invalidate(); return; }
+            if(type==12){ if(idx>=0 && idx<habits.size()){ prefs.edit().putBoolean(key(selectedDay,habits.get(idx).id),!done(selectedDay,idx)).putBoolean(touched(selectedDay),true).apply(); invalidate(); } return; }
+        }
+'''
+          java = re.sub(r'        void action\(int type,int idx\)\{.*?\n        void addHabit', novo_action + '        void addHabit', java, flags=re.S)
+
+          files = {
+              'oliven_v114/build.gradle': "plugins {\n    id 'com.android.application' version '8.7.3' apply false\n}\n",
+              'oliven_v114/settings.gradle': "pluginManagement {\n    repositories { google(); mavenCentral(); gradlePluginPortal() }\n}\n\ndependencyResolutionManagement {\n    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\n    repositories { google(); mavenCentral() }\n}\n\nrootProject.name = 'Oliven114'\ninclude ':app'\n",
+              'oliven_v114/app/build.gradle': "plugins {\n    id 'com.android.application'\n}\n\nandroid {\n    namespace 'com.oliven.app'\n    compileSdk 35\n\n    defaultConfig {\n        applicationId 'com.oliven.app'\n        minSdk 23\n        targetSdk 34\n        versionCode 14\n        versionName '1.0.14'\n    }\n}\n",
+              'oliven_v114/app/src/main/AndroidManifest.xml': '<manifest xmlns:android="http://schemas.android.com/apk/res/android">\n    <application\n        android:theme="@style/AppTheme"\n        android:label="Oliven"\n        android:icon="@drawable/oliven_logo_icon"\n        android:roundIcon="@drawable/oliven_logo_icon"\n        android:allowBackup="false"\n        android:supportsRtl="true">\n        <activity\n            android:name=".MainActivity"\n            android:screenOrientation="portrait"\n            android:exported="true">\n            <intent-filter>\n                <action android:name="android.intent.action.MAIN" />\n                <category android:name="android.intent.category.LAUNCHER" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>\n',
+              'oliven_v114/app/src/main/res/values/styles.xml': '<resources>\n    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">\n        <item name="android:fontFamily">sans</item>\n        <item name="android:windowNoTitle">true</item>\n        <item name="android:windowActionBar">false</item>\n        <item name="android:windowLightStatusBar">true</item>\n        <item name="android:statusBarColor">#FAFBF8</item>\n        <item name="android:navigationBarColor">#000000</item>\n        <item name="android:windowBackground">#FAFBF8</item>\n    </style>\n</resources>\n',
+              'oliven_v114/app/src/main/res/drawable/oliven_logo_icon.xml': '<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">\n    <path android:pathData="M20,54 L37,54" android:strokeColor="#748A35" android:strokeWidth="7" android:strokeLineCap="round" android:fillColor="@android:color/transparent"/>\n    <path android:pathData="M71,54 L88,54" android:strokeColor="#748A35" android:strokeWidth="7" android:strokeLineCap="round" android:fillColor="@android:color/transparent"/>\n    <path android:pathData="M18,48 A36,36 0,0 1,90 48" android:strokeColor="#748A35" android:strokeWidth="8" android:strokeLineCap="butt" android:fillColor="@android:color/transparent"/>\n    <path android:pathData="M18,60 A36,36 0,0 0,90 60" android:strokeColor="#748A35" android:strokeWidth="8" android:strokeLineCap="butt" android:fillColor="@android:color/transparent"/>\n    <path android:fillColor="#748A35" android:pathData="M20,54m-5,0a5,5 0,1 0,10 0a5,5 0,1 0,-10 0"/>\n    <path android:fillColor="#748A35" android:pathData="M37,54m-6,0a6,6 0,1 0,12 0a6,6 0,1 0,-12 0"/>\n    <path android:fillColor="#748A35" android:pathData="M71,54m-6,0a6,6 0,1 0,12 0a6,6 0,1 0,-12 0"/>\n    <path android:fillColor="#748A35" android:pathData="M88,54m-5,0a5,5 0,1 0,10 0a5,5 0,1 0,-10 0"/>\n</vector>\n',
+              'oliven_v114/app/src/main/java/com/oliven/app/MainActivity.java': java,
+          }
+          for path, content in files.items():
+              Path(path).parent.mkdir(parents=True, exist_ok=True)
+              Path(path).write_text(content, encoding='utf-8')
+          PY
+      - name: Build APK
+        run: |
+          cd oliven_v114
+          gradle :app:assembleDebug --no-daemon
+      - name: Prepare artifact
+        run: |
+          mkdir -p dist
+          cp oliven_v114/app/build/outputs/apk/debug/app-debug.apk dist/Oliven-v1.0.14.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-APK-v1.0.14
+          path: dist/Oliven-v1.0.14.apk
