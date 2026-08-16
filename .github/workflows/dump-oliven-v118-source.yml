@@ -1,0 +1,31 @@
+name: Dump Oliven v1.0.18 Source
+
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+  workflow_dispatch:
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          src = Path('.github/workflows/build-oliven-v118-fixed.yml').read_text(encoding='utf-8')
+          start = src.index('          from pathlib import Path')
+          end = src.index('\n          PY', start)
+          bloco = src[start:end]
+          codigo = '\n'.join(linha[10:] if linha.startswith('          ') else linha for linha in bloco.splitlines())
+          exec(compile(codigo, 'build-oliven-v118-extraido.py', 'exec'), {})
+          PY
+      - name: Prepare source artifact
+        run: |
+          mkdir -p dist
+          cp oliven_v114/app/src/main/java/com/oliven/app/MainActivity.java dist/MainActivity-v118.java
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-MainActivity-v118
+          path: dist/MainActivity-v118.java
