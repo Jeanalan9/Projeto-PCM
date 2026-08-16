@@ -43,27 +43,32 @@ jobs:
           unzip -q build_src/pcm_authenticator.zip -d build_src
           test -f build_src/PCM_Authenticator/app/build.gradle
 
-      - name: Aplicar interface aprovada v1.1.0
+      - name: Aplicar interface base v1.1.0
         run: |
           cp tmp_pcm_authenticator/MainActivity_v110.java build_src/PCM_Authenticator/app/src/main/java/br/com/pcm/authenticator/MainActivity.java
+
+      - name: Aplicar ajustes funcionais v1.1.1
+        run: python tmp_pcm_authenticator/ajuste_v111.py
+
+      - name: Aplicar padrão visual PCM v1.2.0
+        run: python tmp_pcm_authenticator/ajuste_v120_pcm.py
+
+      - name: Aplicar tema Android PCM
+        run: |
           cat > build_src/PCM_Authenticator/app/src/main/res/values/styles.xml <<'EOF'
           <resources>
               <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
                   <item name="android:fontFamily">sans</item>
                   <item name="android:windowLightStatusBar">true</item>
-                  <item name="android:statusBarColor">#F9F9F6</item>
-                  <item name="android:navigationBarColor">#F9F9F6</item>
+                  <item name="android:statusBarColor">#FAFAFA</item>
+                  <item name="android:navigationBarColor">#FAFAFA</item>
                   <item name="android:windowLightNavigationBar">true</item>
-                  <item name="android:colorAccent">#145C37</item>
+                  <item name="android:colorAccent">#111111</item>
                   <item name="android:windowNoTitle">true</item>
               </style>
           </resources>
           EOF
-
-      - name: Aplicar ajustes v1.1.1
-        run: |
-          python tmp_pcm_authenticator/ajuste_v111.py
-          sed -i "s/versionCode 1/versionCode 3/; s/versionName '1.0.0'/versionName '1.1.1'/" build_src/PCM_Authenticator/app/build.gradle
+          sed -i "s/versionCode 1/versionCode 4/; s/versionName '1.0.0'/versionName '1.2.0'/" build_src/PCM_Authenticator/app/build.gradle
 
       - name: Compilar APK debug
         working-directory: build_src/PCM_Authenticator
@@ -73,13 +78,13 @@ jobs:
         run: |
           test -f build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
           ls -lh build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
-          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.1.1_debug.apk
-          sha256sum PCM_Authenticator_v1.1.1_debug.apk
+          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.2.0_debug.apk
+          sha256sum PCM_Authenticator_v1.2.0_debug.apk
 
       - name: Publicar APK
         uses: actions/upload-artifact@v4
         with:
-          name: PCM_Authenticator_APK_v1_1_1
-          path: PCM_Authenticator_v1.1.1_debug.apk
+          name: PCM_Authenticator_APK_v1_2_0
+          path: PCM_Authenticator_v1.2.0_debug.apk
           if-no-files-found: error
           retention-days: 7
