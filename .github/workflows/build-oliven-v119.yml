@@ -1,0 +1,229 @@
+name: Build Oliven v1.0.19 APK
+
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Prepare Oliven v1.0.19 sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+
+          def executar_python_workflow(path):
+              src = Path(path).read_text(encoding='utf-8')
+              start = src.index('          from pathlib import Path')
+              end = src.index('\n          PY', start)
+              bloco = src[start:end]
+              codigo = '\n'.join(linha[10:] if linha.startswith('          ') else linha for linha in bloco.splitlines())
+              exec(compile(codigo, path + '-extraido.py', 'exec'), {})
+
+          def replace_method(src, name, new_body):
+              needle = 'void ' + name + '('
+              start = src.index(needle)
+              brace = src.index('{', start)
+              depth = 0
+              end = None
+              for i in range(brace, len(src)):
+                  ch = src[i]
+                  if ch == '{':
+                      depth += 1
+                  elif ch == '}':
+                      depth -= 1
+                      if depth == 0:
+                          end = i + 1
+                          break
+              if end is None:
+                  raise SystemExit('Não encontrei o fim do método ' + name)
+              return src[:start] + new_body + src[end:]
+
+          executar_python_workflow('.github/workflows/build-oliven-v118-fixed.yml')
+
+          main = Path('oliven_v114/app/src/main/java/com/oliven/app/MainActivity.java')
+          java = main.read_text(encoding='utf-8')
+          if hashlib.sha256(java.encode('utf-8')).hexdigest() != 'c3e6cb42072871b59c13d139c5ef3bffcf91576263d254983093f17644675e00':
+              raise SystemExit('Base v1.0.18 inesperada')
+
+          java = java.replace('Oliven 1.0.18 · Android nativo', 'Oliven 1.0.19 · Android nativo')
+
+          draw_calendar_circle = r'''void drawCalendarCircle(Canvas c){
+            float y=contentTop+30;
+            center(c,"Círculo de consistência",195,y,16.5f,TEXT,true);
+            text(c,"‹",28,y+2,20,TEXT,false);
+            text(c,"›",354,y+2,20,TEXT,false);
+            hit(14,y-18,60,y+45,9,-1);
+            hit(330,y-18,380,y+45,9,1);
+            center(c,monthName(shownMonth),195,y+31,10.5f,TEXT,true);
+
+            float ringTop=y+52;
+            float ringH=Math.min(360, bottomTop-ringTop-168);
+            if(ringH<330) ringH=330;
+            card(c,14,ringTop,376,ringTop+ringH,18);
+            drawMonthRing(c,195,ringTop+ringH/2,112,shownMonth);
+
+            float habitsTop=ringTop+ringH+12;
+            float habitsBottom=bottomTop-9;
+            card(c,14,habitsTop,376,habitsBottom,18);
+            text(c,"Hábitos do dia",28,habitsTop+30,12,TEXT,true);
+            right(c,doneMain(selectedDay)+" de "+mainCount()+" concluídos",358,habitsTop+30,10,GREEN,true);
+
+            calendarHabitsTop=habitsTop+46;
+            calendarHabitsBottom=habitsBottom-12;
+            float row=33;
+            float fullH=mainCount()*row;
+            float visibleH=Math.max(0, calendarHabitsBottom-calendarHabitsTop);
+            calendarHabitMaxScroll=Math.max(0, fullH-visibleH+4);
+            if(calendarHabitScroll>calendarHabitMaxScroll) calendarHabitScroll=calendarHabitMaxScroll;
+            if(calendarHabitScroll<0) calendarHabitScroll=0;
+            int save=c.save();
+            c.clipRect(X(18),Y(calendarHabitsTop-2),X(372),Y(calendarHabitsBottom+2));
+            float first=calendarHabitsTop+22-calendarHabitScroll;
+            for(int i=0;i<mainCount();i++){
+                float yy=first+i*row;
+                if(yy<calendarHabitsTop-20 || yy>calendarHabitsBottom+20) continue;
+                check(c,36,yy-3,done(selectedDay,i));
+                text(c,habits.get(i).name,54,yy+1,11.2f,TEXT,true);
+                hit(22,Math.max(calendarHabitsTop,yy-16),366,Math.min(calendarHabitsBottom,yy+16),12,i);
+            }
+            c.restoreToCount(save);
+            if(calendarHabitMaxScroll>1){
+                float trackTop=calendarHabitsTop+5, trackBottom=calendarHabitsBottom-5;
+                round(c,366,trackTop,369,trackBottom,2,LIGHT);
+                float thumbH=Math.max(18,(trackBottom-trackTop)*(visibleH/fullH));
+                float thumbTop=trackTop+(trackBottom-trackTop-thumbH)*(calendarHabitScroll/calendarHabitMaxScroll);
+                round(c,366,thumbTop,369,thumbTop+thumbH,2,GREEN);
+            }
+            maxScroll=0;
+        }'''
+
+          draw_month_ring = r'''void drawMonthRing(Canvas c,float cx,float cy,float r,Calendar month){
+            Calendar m=(Calendar)month.clone();
+            m.set(Calendar.DAY_OF_MONTH,1);
+            int max=m.getActualMaximum(Calendar.DAY_OF_MONTH);
+            for(int d=1;d<=max;d++){
+                float step=360f/max;
+                float angDeg=-90+(d-1)*step;
+                double ang=Math.toRadians(angDeg);
+                float sx=cx+(float)Math.cos(ang)*r;
+                float sy=cy+(float)Math.sin(ang)*r;
+                Calendar day=cal(m.get(Calendar.YEAR),m.get(Calendar.MONTH),d);
+                int pc=pct(day);
+                boolean sel=sameDay(day,selectedDay);
+                int save=c.save();
+                c.rotate(angDeg+90,X(sx),Y(sy));
+                float w=20.0f, h=12.4f;
+                round(c,sx-w/2,sy-h/2,sx+w/2,sy+h/2,4.5f,LIGHT);
+                if(!future(day) && pc>0){
+                    float fillH=(h-2.4f)*pc/100f;
+                    round(c,sx-w/2+1.3f,sy+h/2-1.2f-fillH,sx+w/2-1.3f,sy+h/2-1.2f,3.2f,GREEN);
+                }
+                c.restoreToCount(save);
+                if(sel){
+                    p.setStyle(Paint.Style.STROKE);
+                    p.setStrokeWidth(X(2.1f));
+                    p.setColor(GREEN_DARK);
+                    c.drawRoundRect(X(sx-12.4f),Y(sy-9.0f),X(sx+12.4f),Y(sy+9.0f),X(6.2f),X(6.2f),p);
+                }
+                float lx=cx+(float)Math.cos(ang)*(r+26);
+                float ly=cy+(float)Math.sin(ang)*(r+26);
+                center(c,String.valueOf(d),lx,ly+3,6.1f,sel?GREEN_DARK:MUTED,sel);
+                hit(sx-18,sy-18,sx+18,sy+18,11,d);
+            }
+            p.setStyle(Paint.Style.FILL);
+            p.setColor(WHITE);
+            c.drawCircle(X(cx),Y(cy),X(64),p);
+            center(c,String.valueOf(selectedDay.get(Calendar.DAY_OF_MONTH)),cx,cy-7,35,TEXT,true);
+            center(c,shortMonth(selectedDay),cx,cy+23,9.8f,MUTED,true);
+            center(c,pct(selectedDay)+"%",cx,cy+43,9.5f,GREEN,true);
+        }'''
+
+          java = replace_method(java, 'drawCalendarCircle', draw_calendar_circle)
+          java = replace_method(java, 'drawMonthRing', draw_month_ring)
+
+          old = '                    center(c,"⋮",348,yy+29,17,MUTED,true);\n'
+          new = '                    center(c,"⋮",348,yy+29,17,MUTED,true);\n                    hit(326,yy+2,366,yy+44,14,i);\n'
+          if old not in java:
+              raise SystemExit('Ponto do menu de hábitos não encontrado')
+          java = java.replace(old, new, 1)
+
+          action_method = r'''void action(int type,int idx){
+  if(type==1){ menu=true; invalidate(); return; }
+  if(type==2){ screen=idx; scroll=0; menu=false; invalidate(); return; }
+  if(type==3){ Calendar c=(Calendar)now.clone(); prefs.edit().putBoolean(key(c,habits.get(idx).id),!done(c,idx)).putBoolean(touched(c),true).apply(); invalidate(); return; }
+  if(type==5){ selectedPeriod=idx; invalidate(); return; }
+  if(type==6){ selectedCat=idx; scroll=0; invalidate(); return; }
+  if(type==7){ addHabit(); return; }
+  if(type==8){ screen=idx; scroll=0; menu=false; invalidate(); return; }
+  if(type==9){ shownMonth.add(Calendar.MONTH,idx); selectedDay=cal(shownMonth.get(Calendar.YEAR),shownMonth.get(Calendar.MONTH),Math.min(selectedDay.get(Calendar.DAY_OF_MONTH),shownMonth.getActualMaximum(Calendar.DAY_OF_MONTH))); scroll=0; invalidate(); return; }
+  if(type==10){ screen=idx; scroll=0; invalidate(); return; }
+  if(type==11){ selectedDay=cal(shownMonth.get(Calendar.YEAR),shownMonth.get(Calendar.MONTH),idx); invalidate(); return; }
+  if(type==12){ if(idx>=0 && idx<habits.size()){ prefs.edit().putBoolean(key(selectedDay,habits.get(idx).id),!done(selectedDay,idx)).putBoolean(touched(selectedDay),true).apply(); invalidate(); } return; }
+  if(type==13){ shownMonth.set(Calendar.MONTH,idx); shownMonth.set(Calendar.DAY_OF_MONTH,1); selectedDay=cal(shownMonth.get(Calendar.YEAR),idx,Math.min(selectedDay.get(Calendar.DAY_OF_MONTH),shownMonth.getActualMaximum(Calendar.DAY_OF_MONTH))); invalidate(); return; }
+  if(type==14){ confirmDeleteHabit(idx); return; }
+        }'''
+          java = replace_method(java, 'action', action_method)
+
+          confirm = r'''void confirmDeleteHabit(final int idx){
+            if(idx<0 || idx>=habits.size()) return;
+            final Habit h=habits.get(idx);
+            AlertDialog dlg = new AlertDialog.Builder(getContext())
+                .setTitle("Excluir hábito")
+                .setMessage("Deseja excluir \""+h.name+"\" dos hábitos cadastrados?")
+                .setNegativeButton("CANCELAR", null)
+                .setPositiveButton("EXCLUIR", (dialog, which) -> {
+                    habits.remove(idx);
+                    saveHabits();
+                    habitsListScroll=0;
+                    homeHabitScroll=0;
+                    calendarHabitScroll=0;
+                    if(selectedCat>0 && visibleHabitCount()==0) selectedCat=0;
+                    invalidate();
+                })
+                .create();
+            dlg.setOnShowListener(d -> {
+                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(GREEN);
+                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(MUTED);
+            });
+            dlg.show();
+        }
+
+        '''
+          if 'void confirmDeleteHabit(' not in java:
+              java = java.replace('void addHabit(){', confirm + 'void addHabit(){', 1)
+
+          main.write_text(java, encoding='utf-8')
+
+          gradle = Path('oliven_v114/app/build.gradle')
+          g = gradle.read_text(encoding='utf-8')
+          g = g.replace('versionCode 18', 'versionCode 19').replace("versionName '1.0.18'", "versionName '1.0.19'")
+          g = g.replace('versionCode 14', 'versionCode 19').replace("versionName '1.0.14'", "versionName '1.0.19'")
+          gradle.write_text(g, encoding='utf-8')
+
+          settings = Path('oliven_v114/settings.gradle')
+          settings.write_text(settings.read_text(encoding='utf-8').replace('Oliven118','Oliven119').replace('Oliven114','Oliven119'), encoding='utf-8')
+
+          print('MainActivity v1.0.19 SHA:', hashlib.sha256(java.encode('utf-8')).hexdigest())
+          PY
+      - name: Build APK
+        run: |
+          cd oliven_v114
+          gradle :app:assembleDebug --no-daemon
+      - name: Prepare artifact
+        run: |
+          mkdir -p dist
+          cp oliven_v114/app/build/outputs/apk/debug/app-debug.apk dist/Oliven-v1.0.19.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-APK-v1.0.19
+          path: dist/Oliven-v1.0.19.apk
