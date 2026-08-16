@@ -47,6 +47,8 @@ jobs:
         run: python tmp_pcm_authenticator/corrigir_v120.py
       - name: Ajustar barra inferior v1.2.1
         run: python tmp_pcm_authenticator/ajuste_v121_barra_inferior.py
+      - name: Implementar funcionalidades v1.3.0
+        run: python tmp_pcm_authenticator/ajuste_v130_funcionalidades.py
       - name: Aplicar tema Android PCM
         run: |
           cat > build_src/PCM_Authenticator/app/src/main/res/values/styles.xml <<'EOF'
@@ -62,7 +64,7 @@ jobs:
               </style>
           </resources>
           EOF
-          sed -i "s/versionCode 1/versionCode 5/; s/versionName '1.0.0'/versionName '1.2.1'/" build_src/PCM_Authenticator/app/build.gradle
+          sed -i "s/versionCode 1/versionCode 6/; s/versionName '1.0.0'/versionName '1.3.0'/" build_src/PCM_Authenticator/app/build.gradle
       - name: Compilar APK debug
         working-directory: build_src/PCM_Authenticator
         run: gradle --no-daemon clean assembleDebug
@@ -70,12 +72,12 @@ jobs:
         run: |
           test -f build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
           ls -lh build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
-          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.2.1_debug.apk
-          sha256sum PCM_Authenticator_v1.2.1_debug.apk
+          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.3.0_debug.apk
+          sha256sum PCM_Authenticator_v1.3.0_debug.apk
       - name: Publicar APK
         uses: actions/upload-artifact@v4
         with:
-          name: PCM_Authenticator_APK_v1_2_1
-          path: PCM_Authenticator_v1.2.1_debug.apk
+          name: PCM_Authenticator_APK_v1_3_0
+          path: PCM_Authenticator_v1.3.0_debug.apk
           if-no-files-found: error
           retention-days: 7
