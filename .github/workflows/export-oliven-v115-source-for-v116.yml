@@ -1,0 +1,40 @@
+name: Export Oliven v1.0.15 Source for v1.0.16
+
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+  workflow_dispatch:
+
+jobs:
+  export_source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate current Oliven v1.0.15 source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, zlib, hashlib
+          src = Path('.github/workflows/build-oliven-v114.yml').read_text(encoding='utf-8')
+          start = src.index('          from pathlib import Path')
+          end = src.index('\n          PY', start)
+          bloco = src[start:end]
+          codigo = '\n'.join(linha[10:] if linha.startswith('          ') else linha for linha in bloco.splitlines())
+          exec(compile(codigo, 'build-oliven-v114-extraido.py', 'exec'), {})
+          b64 = ''.join(Path(f'oliven_build/v115/main.zb64.{n:03d}').read_text(encoding='utf-8').strip() for n in range(1,5))
+          java = zlib.decompress(base64.b64decode(b64)).decode('utf-8')
+          sha = hashlib.sha256(java.encode('utf-8')).hexdigest()
+          if sha != '6581eafddfda3474e71d24f0a972347f3fe5544eef1b38734acb72e7b54a66b4':
+              raise SystemExit(f'SHA inesperado do MainActivity.java: {sha}')
+          out = Path('export_v115')
+          out.mkdir(exist_ok=True)
+          (out / 'MainActivity.java').write_text(java, encoding='utf-8')
+          (out / 'app-build.gradle').write_text(Path('oliven_v114/app/build.gradle').read_text(encoding='utf-8'), encoding='utf-8')
+          (out / 'settings.gradle').write_text(Path('oliven_v114/settings.gradle').read_text(encoding='utf-8'), encoding='utf-8')
+          (out / 'oliven_logo_icon.xml').write_text(Path('oliven_v114/app/src/main/res/drawable/oliven_logo_icon.xml').read_text(encoding='utf-8'), encoding='utf-8')
+          print('exportado', sha)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-v1.0.15-source-for-v1.0.16
+          path: export_v115/**
