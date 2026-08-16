@@ -1,0 +1,62 @@
+name: Build PCM Authenticator APK
+
+on:
+  push:
+    branches:
+      - build/pcm-authenticator-apk
+    paths:
+      - 'tmp_pcm_authenticator/**'
+      - '.github/workflows/build_pcm_authenticator.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar SDK Android 35
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'platform-tools'
+
+      - name: Restaurar projeto Android
+        run: |
+          mkdir -p build_src
+          base64 --decode tmp_pcm_authenticator/PCM_Authenticator_Projeto_Android.zip.b64 > build_src/pcm_authenticator.zip
+          unzip -q build_src/pcm_authenticator.zip -d build_src
+          test -f build_src/PCM_Authenticator/app/build.gradle
+
+      - name: Compilar APK debug
+        working-directory: build_src/PCM_Authenticator
+        run: gradle --no-daemon clean assembleDebug
+
+      - name: Validar APK gerado
+        run: |
+          test -f build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
+          ls -lh build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
+          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.0.0_debug.apk
+
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PCM_Authenticator_APK
+          path: PCM_Authenticator_v1.0.0_debug.apk
+          if-no-files-found: error
+          retention-days: 7
