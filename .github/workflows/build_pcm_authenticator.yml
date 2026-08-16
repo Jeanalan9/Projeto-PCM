@@ -43,7 +43,7 @@ jobs:
           unzip -q build_src/pcm_authenticator.zip -d build_src
           test -f build_src/PCM_Authenticator/app/build.gradle
 
-      - name: Aplicar interface v1.1.0
+      - name: Aplicar interface aprovada v1.1.0
         run: |
           cp tmp_pcm_authenticator/MainActivity_v110.java build_src/PCM_Authenticator/app/src/main/java/br/com/pcm/authenticator/MainActivity.java
           cat > build_src/PCM_Authenticator/app/src/main/res/values/styles.xml <<'EOF'
@@ -59,7 +59,11 @@ jobs:
               </style>
           </resources>
           EOF
-          sed -i "s/versionCode 1/versionCode 2/; s/versionName '1.0.0'/versionName '1.1.0'/" build_src/PCM_Authenticator/app/build.gradle
+
+      - name: Aplicar ajustes v1.1.1
+        run: |
+          python tmp_pcm_authenticator/ajuste_v111.py
+          sed -i "s/versionCode 1/versionCode 3/; s/versionName '1.0.0'/versionName '1.1.1'/" build_src/PCM_Authenticator/app/build.gradle
 
       - name: Compilar APK debug
         working-directory: build_src/PCM_Authenticator
@@ -69,13 +73,13 @@ jobs:
         run: |
           test -f build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
           ls -lh build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk
-          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.1.0_debug.apk
-          sha256sum PCM_Authenticator_v1.1.0_debug.apk
+          cp build_src/PCM_Authenticator/app/build/outputs/apk/debug/app-debug.apk PCM_Authenticator_v1.1.1_debug.apk
+          sha256sum PCM_Authenticator_v1.1.1_debug.apk
 
       - name: Publicar APK
         uses: actions/upload-artifact@v4
         with:
-          name: PCM_Authenticator_APK_v1_1_0
-          path: PCM_Authenticator_v1.1.0_debug.apk
+          name: PCM_Authenticator_APK_v1_1_1
+          path: PCM_Authenticator_v1.1.1_debug.apk
           if-no-files-found: error
           retention-days: 7
