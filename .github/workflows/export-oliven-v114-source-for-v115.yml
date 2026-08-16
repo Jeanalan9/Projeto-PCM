@@ -1,0 +1,52 @@
+name: Export Oliven v1.0.14 Source for v1.0.15
+
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+  workflow_dispatch:
+
+jobs:
+  export_source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate current Oliven source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          src = Path('.github/workflows/build-oliven-v114.yml').read_text(encoding='utf-8')
+          start = src.index('          from pathlib import Path')
+          end = src.index('\n          PY', start)
+          bloco = src[start:end]
+          codigo = '\n'.join(linha[10:] if linha.startswith('          ') else linha for linha in bloco.splitlines())
+          exec(compile(codigo, 'build-oliven-v114-extraido.py', 'exec'), {})
+          main = Path('oliven_v114/app/src/main/java/com/oliven/app/MainActivity.java')
+          linhas = main.read_text(encoding='utf-8').splitlines()
+          filtradas = []
+          for ln in linhas:
+              if 'boolean sameDay' in ln and 'DAY_OF_MONTH' in ln:
+                  continue
+              filtradas.append(ln)
+          metodo = '        boolean sameDay(Calendar a, Calendar b){ return a.get(Calendar.YEAR)==b.get(Calendar.YEAR) && a.get(Calendar.MONTH)==b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH)==b.get(Calendar.DAY_OF_MONTH); }'
+          saida = []
+          inserido = False
+          for ln in filtradas:
+              if (not inserido) and 'String shortMonth(Calendar c)' in ln:
+                  saida.append(metodo)
+                  inserido = True
+              saida.append(ln)
+          if not inserido:
+              raise SystemExit('Não foi possível inserir sameDay único')
+          main.write_text('\n'.join(saida) + '\n', encoding='utf-8')
+          PY
+      - name: Package source
+        run: |
+          mkdir -p dist-source
+          cp oliven_v114/app/src/main/java/com/oliven/app/MainActivity.java dist-source/MainActivity.java
+          cp -R oliven_v114/app/src/main/res dist-source/res
+          cp oliven_v114/app/build.gradle dist-source/app-build.gradle
+          cp oliven_v114/settings.gradle dist-source/settings.gradle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-v1.0.14-source-for-v1.0.15
+          path: dist-source
