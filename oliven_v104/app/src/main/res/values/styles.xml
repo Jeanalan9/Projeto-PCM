@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.Oliven" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/oliven_bg</item>
+        <item name="android:navigationBarColor">@color/oliven_nav</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorAccent">@color/oliven_green</item>
+    </style>
+</resources>
