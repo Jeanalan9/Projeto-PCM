@@ -16,16 +16,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Prepare Oliven source
-        run: |
-          mkdir -p build_oliven
-          base64 -d oliven_build/oliven_project.tar.gz.b64 | tar -xz -C build_oliven
       - name: Build APK
-        run: gradle -p build_oliven :app:assembleDebug --stacktrace
+        run: gradle -p oliven_v102 :app:assembleDebug --stacktrace
       - name: Prepare artifact
-        run: cp build_oliven/app/build/outputs/apk/debug/app-debug.apk Oliven-v1.0.1.apk
+        run: cp oliven_v102/app/build/outputs/apk/debug/app-debug.apk Oliven-v1.0.2.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: Oliven-APK-v1.0.1
-          path: Oliven-v1.0.1.apk
+          name: Oliven-APK-v1.0.2
+          path: Oliven-v1.0.2.apk
           if-no-files-found: error
