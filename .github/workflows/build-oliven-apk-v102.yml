@@ -1,0 +1,39 @@
+name: Build Oliven APK v1.0.2
+permissions:
+  contents: write
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+    paths-ignore:
+      - 'oliven_build/Oliven-v1.0.2.apk.b64'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: oliven-habitos-apk-build
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build APK
+        run: gradle -p oliven_v102 :app:assembleDebug --stacktrace
+      - name: Publish APK payload to branch
+        run: |
+          mkdir -p oliven_build
+          base64 -w 0 oliven_v102/app/build/outputs/apk/debug/app-debug.apk > oliven_build/Oliven-v1.0.2.apk.b64
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add oliven_build/Oliven-v1.0.2.apk.b64
+          git commit -m 'build: publish Oliven v1.0.2 APK' || exit 0
+          git push origin HEAD:oliven-habitos-apk-build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-APK-v1.0.2
+          path: oliven_v102/app/build/outputs/apk/debug/app-debug.apk
