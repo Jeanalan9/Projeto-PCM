@@ -1,0 +1,75 @@
+name: Build Oliven v1.0.14 APK Final F
+
+on:
+  push:
+    branches: [ oliven-habitos-apk-build ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Prepare Oliven v1.0.14 sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          src = Path('.github/workflows/build-oliven-v114.yml').read_text(encoding='utf-8')
+          start = src.index('          from pathlib import Path')
+          end = src.index('\n          PY', start)
+          bloco = src[start:end]
+          codigo = '\n'.join(linha[10:] if linha.startswith('          ') else linha for linha in bloco.splitlines())
+          exec(compile(codigo, 'build-oliven-v114-extraido.py', 'exec'), {})
+
+          main = Path('oliven_v114/app/src/main/java/com/oliven/app/MainActivity.java')
+          linhas = main.read_text(encoding='utf-8').splitlines()
+          limpas = []
+          pulando = False
+          balanco = 0
+          for ln in linhas:
+              if (not pulando) and ('sameDay' in ln) and ('boolean' in ln):
+                  balanco = ln.count('{') - ln.count('}')
+                  pulando = balanco > 0
+                  continue
+              if pulando:
+                  balanco += ln.count('{') - ln.count('}')
+                  if balanco <= 0:
+                      pulando = False
+                  continue
+              limpas.append(ln)
+          metodo = '        boolean sameDay(Calendar a, Calendar b){ return a.get(Calendar.YEAR)==b.get(Calendar.YEAR) && a.get(Calendar.MONTH)==b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH)==b.get(Calendar.DAY_OF_MONTH); }'
+          saida = []
+          inserido = False
+          for ln in limpas:
+              if (not inserido) and 'boolean future(Calendar c){' in ln:
+                  saida.append(metodo)
+                  inserido = True
+              saida.append(ln)
+          if not inserido:
+              for i, ln in enumerate(saida):
+                  if 'String shortMonth(Calendar c)' in ln:
+                      saida.insert(i, metodo)
+                      inserido = True
+                      break
+          if not inserido:
+              raise SystemExit('Não consegui inserir sameDay')
+          main.write_text('\n'.join(saida) + '\n', encoding='utf-8')
+          PY
+      - name: Build APK
+        run: |
+          cd oliven_v114
+          grep -n "sameDay" app/src/main/java/com/oliven/app/MainActivity.java || true
+          gradle :app:assembleDebug --no-daemon
+      - name: Prepare artifact
+        run: |
+          mkdir -p dist
+          cp oliven_v114/app/build/outputs/apk/debug/app-debug.apk dist/Oliven-v1.0.14.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Oliven-APK-v1.0.14
+          path: dist/Oliven-v1.0.14.apk
