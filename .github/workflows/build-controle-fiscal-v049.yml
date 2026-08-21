@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - controle-fiscal-v049-build
+    paths:
+      - '.github/workflows/build-controle-fiscal-v049.yml'
+      - '.build-v049/**'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -50,30 +56,63 @@ jobs:
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Build debug APK
+        id: build_apk
+        continue-on-error: true
         working-directory: android-v049
         shell: bash
         run: |
-          set -euxo pipefail
-          gradle --no-daemon :app:assembleDebug
+          set -o pipefail
+          gradle --no-daemon :app:assembleDebug 2>&1 | tee ../build-v049.log
 
       - name: Validate APK
+        id: validate_apk
+        if: steps.build_apk.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           set -euxo pipefail
           APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
           test -f "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | tee /tmp/badging.txt
-          grep -F "package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9'" /tmp/badging.txt
-          mkdir -p artifact
-          cp "$APK" artifact/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk
-          sha256sum artifact/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk | tee artifact/SHA256SUMS.txt
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK" | tee validate-v049.log
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | tee badging-v049.txt
+          grep -F "package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9'" badging-v049.txt
 
-      - name: Upload APK
+      - name: Publish build result to branch
+        if: always()
+        shell: bash
+        env:
+          BUILD_OUTCOME: ${{ steps.build_apk.outcome }}
+          VALIDATE_OUTCOME: ${{ steps.validate_apk.outcome }}
+        run: |
+          set -euxo pipefail
+          rm -rf dist-v049
+          mkdir -p dist-v049
+          printf 'build=%s\nvalidate=%s\ncommit=%s\n' "$BUILD_OUTCOME" "$VALIDATE_OUTCOME" "$GITHUB_SHA" > dist-v049/STATUS.txt
+          test -f build-v049.log && cp build-v049.log dist-v049/build-v049.log || true
+          test -f validate-v049.log && cp validate-v049.log dist-v049/validate-v049.log || true
+          test -f badging-v049.txt && cp badging-v049.txt dist-v049/badging-v049.txt || true
+          APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
+          if [ -f "$APK" ]; then
+            cp "$APK" dist-v049/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk
+            sha256sum dist-v049/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk > dist-v049/SHA256SUMS.txt
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -f dist-v049
+          git commit -m 'build: publish Controle Fiscal V0.4.9 result [skip build]' || true
+          git push
+
+      - name: Upload APK artifact
+        if: steps.build_apk.outcome == 'success' && steps.validate_apk.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL
-          path: artifact/*
+          path: dist-v049/*
           if-no-files-found: error
           retention-days: 7
+
+      - name: Enforce successful build and validation
+        if: steps.build_apk.outcome != 'success' || steps.validate_apk.outcome != 'success'
+        shell: bash
+        run: exit 1
