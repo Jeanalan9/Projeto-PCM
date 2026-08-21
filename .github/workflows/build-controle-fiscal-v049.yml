@@ -1,0 +1,79 @@
+name: Build Controle Fiscal V0.4.9
+
+on:
+  push:
+    branches:
+      - controle-fiscal-v049-build
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Reconstruct Android project
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p android-v049
+          cat .build-v049/payload.part* > /tmp/controle-fiscal-v049-project.tar.gz.b64
+          test "$(wc -c < /tmp/controle-fiscal-v049-project.tar.gz.b64)" = "77656"
+          echo "20941d34df4ff760b87fcfec2ca136f656de0ab22bea606cf0b58909e38203f9  /tmp/controle-fiscal-v049-project.tar.gz.b64" | sha256sum -c -
+          base64 -d /tmp/controle-fiscal-v049-project.tar.gz.b64 > /tmp/controle-fiscal-v049-project.tar.gz
+          echo "4a9c68e61c499bbd02170d0e4cafcb801fda49707ce017a7910911a9cbb9ec5e  /tmp/controle-fiscal-v049-project.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/controle-fiscal-v049-project.tar.gz -C android-v049
+          test -f android-v049/settings.gradle
+          test -f android-v049/app/build.gradle
+
+      - name: Install Android 35
+        shell: bash
+        run: |
+          set -euxo pipefail
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Build debug APK
+        working-directory: android-v049
+        shell: bash
+        run: |
+          set -euxo pipefail
+          gradle --no-daemon :app:assembleDebug
+
+      - name: Validate APK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
+          test -f "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | tee /tmp/badging.txt
+          grep -F "package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9'" /tmp/badging.txt
+          mkdir -p artifact
+          cp "$APK" artifact/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk
+          sha256sum artifact/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk | tee artifact/SHA256SUMS.txt
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL
+          path: artifact/*
+          if-no-files-found: error
+          retention-days: 7
