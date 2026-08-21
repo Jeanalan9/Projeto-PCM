@@ -35,14 +35,21 @@ Recommendation: remove package="br.com.jeanalan9.controlefiscalpcm" from the sou
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:desugarDebugFileDependencies
-> Task :app:compressDebugAssets
 > Task :app:processDebugJavaRes NO-SOURCE
-> Task :app:mergeDebugJavaResource
+> Task :app:compressDebugAssets
 > Task :app:mergeDebugJniLibFolders
-> Task :app:processDebugManifestForPackage
 > Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugJavaResource
+> Task :app:mergeDebugNativeLibs
+> Task :app:processDebugManifestForPackage
+> Task :app:mergeLibDexDebug
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libmlkit_google_ocr_pipeline.so.
+
 > Task :app:processDebugResources
 > Task :app:mergeExtDexDebug
+> Task :app:validateSigningDebug
 
 > Task :app:compileDebugJavaWithJavac
 Note: Some input files use or override a deprecated API.
@@ -50,20 +57,13 @@ Note: Recompile with -Xlint:deprecation for details.
 
 > Task :app:dexBuilderDebug
 > Task :app:mergeDebugGlobalSynthetics
-> Task :app:mergeLibDexDebug
-> Task :app:mergeProjectDexDebug
-> Task :app:mergeDebugNativeLibs
-> Task :app:validateSigningDebug
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
-
-> Task :app:stripDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libmlkit_google_ocr_pipeline.so.
-
+> Task :app:mergeProjectDexDebug
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build_apk-1787326257250.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build_apk-1787330168674.json
 
-BUILD SUCCESSFUL in 51s
+BUILD SUCCESSFUL in 1m 22s
 34 actionable tasks: 34 executed

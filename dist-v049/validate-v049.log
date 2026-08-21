@@ -477,14 +477,14 @@ Verified using v4 scheme (APK Signature Scheme v4): false
 Verified for SourceStamp: false
 Number of signers: 1
 Signer #1 certificate DN: C=US, O=Android, CN=Android Debug
-Signer #1 certificate SHA-256 digest: b740af51045800bed5640625bd93ab659d95a64edb33fa9427d439de1c7eab02
-Signer #1 certificate SHA-1 digest: b7a2637a37b6a0d2e7320612abd853069eb89d66
-Signer #1 certificate MD5 digest: d1eb8b6a96b4c2196cf426169446bb41
+Signer #1 certificate SHA-256 digest: ae9a22d7e1b4d6c74853db6715eaa90375b83fccc696e773b892fd766c2774f2
+Signer #1 certificate SHA-1 digest: 14f71f2a4d3a00d316211d369d638da3ba61034b
+Signer #1 certificate MD5 digest: 89a9e01d24c950829ede7a958502d109
 Signer #1 key algorithm: RSA
 Signer #1 key size (bits): 2048
-Signer #1 public key SHA-256 digest: 0ae8a3f584cff93dd2d90e01a0c2aef3bf3534860280b732243f73cbc43a9365
-Signer #1 public key SHA-1 digest: 7d70ebb988734af74fe7a4b42285abbab03d030d
-Signer #1 public key MD5 digest: 767bc2af9402ea08f1d7c22423026313
+Signer #1 public key SHA-256 digest: 3a16d5e35ab6332620b3c950bfe82a0939979921d316701a24bca4d6c5055e02
+Signer #1 public key SHA-1 digest: 510bead23d3267b59b32456fc7a4b34303d32b5a
+Signer #1 public key MD5 digest: 4a1f5338f6486eba2ae6c8a0173a085d
 + /usr/local/lib/android/sdk/build-tools/35.0.0/aapt dump badging android-v049/app/build/outputs/apk/debug/app-debug.apk
 + tee badging-v049.txt
 package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
