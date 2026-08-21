@@ -1,0 +1,41 @@
++ rm -rf android-v049
++ mkdir -p android-v049
++ cat .build-v049/payload.part00 .build-v049/payload.part01 .build-v049/payload.part02 .build-v049/payload.part03a .build-v049/payload.part03b .build-v049/payload.part04
++ wc -c /tmp/controle-fiscal-v049-project.tar.gz.b64
+77656 /tmp/controle-fiscal-v049-project.tar.gz.b64
++ sha256sum /tmp/controle-fiscal-v049-project.tar.gz.b64
+6232cb30ff8f6200b5884eb3fb0ea46f232b3eb4d1356a1c9da9476d12cd26c5  /tmp/controle-fiscal-v049-project.tar.gz.b64
++ base64 -d /tmp/controle-fiscal-v049-project.tar.gz.b64
++ sha256sum /tmp/controle-fiscal-v049-project.tar.gz
+118c5744c77e78deb6804dad2d6b3854bfa880dc40d7820c24d520a00bcb4385  /tmp/controle-fiscal-v049-project.tar.gz
++ tar -tzf /tmp/controle-fiscal-v049-project.tar.gz
++ head -30
+./
+./gradle.properties
+./settings.gradle
+./app/
+./app/src/
+./app/src/main/
+./app/src/main/assets/
+./app/src/main/assets/index.html
+./app/src/main/AndroidManifest.xml
+./app/src/main/res/
+./app/src/main/res/drawable/
+./app/src/main/res/drawable/ic_launcher.png
+./app/src/main/java/
+./app/src/main/java/br/
+./app/src/main/java/br/com/
+./app/src/main/java/br/com/jeanalan9/
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/MainActivity.java
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/ConsultaNfeActivity.java
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/ImportedFiscalOcr.java
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/ScannerActivity.java
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/ImportedDocumentDecoder.java
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/EmbeddedScannerController.java
+./app/src/main/java/br/com/jeanalan9/controlefiscalpcm/CropDocumentActivity.java
+./app/build.gradle
+./build.gradle
++ tar -xzf /tmp/controle-fiscal-v049-project.tar.gz -C android-v049
++ test -f android-v049/settings.gradle
++ test -f android-v049/app/build.gradle

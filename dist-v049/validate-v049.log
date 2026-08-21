@@ -1,0 +1,608 @@
++ APK=android-v049/app/build/outputs/apk/debug/app-debug.apk
++ test -f android-v049/app/build/outputs/apk/debug/app-debug.apk
++ /usr/local/lib/android/sdk/build-tools/35.0.0/zipalign -c -v 4 android-v049/app/build/outputs/apk/debug/app-debug.apk
+Verifying alignment of android-v049/app/build/outputs/apk/debug/app-debug.apk (4)...
+      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)
+     180 classes.dex (OK - compressed)
+ 3587672 classes2.dex (OK - compressed)
+ 3627629 classes3.dex (OK - compressed)
+ 3702784 lib/arm64-v8a/libmlkit_google_ocr_pipeline.so (OK)
+14778368 lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so (OK)
+21561344 lib/x86/libmlkit_google_ocr_pipeline.so (OK)
+33128448 lib/x86_64/libmlkit_google_ocr_pipeline.so (OK)
+44754623 assets/index.html (OK - compressed)
+44773165 assets/mlkit-google-ocr-models/aksara/aksara_page_layout_analysis_rpn_gcn.binarypb (OK - compressed)
+44773488 assets/mlkit-google-ocr-models/aksara/aksara_page_layout_analysis_ti_rpn_gcn.binarypb (OK - compressed)
+44773847 assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc/optical/assets.extra/LabelMap.pb (OK - compressed)
+44775518 assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc/optical/conv_model.fb (OK - compressed)
+44806997 assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc/optical/lstm_model.fb (OK - compressed)
+44995233 assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc_cpu.binarypb (OK - compressed)
+44995624 assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/tflite_langid.tflite (OK)
+45311256 assets/mlkit-google-ocr-models/gocr/layout/line_clustering_custom_ops/model.tflite (OK)
+45440980 assets/mlkit-google-ocr-models/gocr/layout/line_splitting_custom_ops/model.tflite (OK)
+45555500 assets/mlkit-google-ocr-models/taser/detector/region_proposal_text_detector_tflite_vertical_mbv2_v1.bincfg (OK - compressed)
+45556024 assets/mlkit-google-ocr-models/taser/detector/rpn_text_detector_mobile_space_to_depth_quantized_mbv2_v1.tflite (OK)
+45896897 assets/mlkit-google-ocr-models/taser/rpn_text_detection_tflite_mobile_mbv2.binarypb (OK - compressed)
+45897150 assets/mlkit-google-ocr-models/taser/segmenter/tflite_script_detector_0.3.bincfg (OK - compressed)
+45897769 assets/mlkit-google-ocr-models/taser/segmenter/tflite_script_detector_0.3.conv_model (OK - compressed)
+45928912 assets/mlkit-google-ocr-models/taser/segmenter/tflite_script_detector_0.3.lstm_model (OK - compressed)
+46052282 assets/mlkit-google-ocr-models/taser/taser_script_identification_tflite_mobile.binarypb (OK - compressed)
+46052534 assets/mlkit-google-ocr-models/taser_tflite_gocrlatin_mbv2_scriptid_aksara_layout_gcn_mobile_engine.binarypb (OK - compressed)
+46055690 assets/mlkit-google-ocr-models/taser_tflite_gocrlatin_mbv2_scriptid_aksara_layout_gcn_mobile_engine_ti.binarypb (OK - compressed)
+46058854 assets/mlkit-google-ocr-models/taser_tflite_gocrlatin_mbv2_scriptid_aksara_layout_gcn_mobile_recognizer.binarypb (OK - compressed)
+46059180 assets/mlkit-google-ocr-models/taser_tflite_gocrlatin_mbv2_scriptid_aksara_layout_gcn_mobile_runner.binarypb (OK - compressed)
+46059554 assets/mlkit-google-ocr-models/taser_tflite_gocrlatin_mbv2_scriptid_aksara_layout_gcn_mobile_runner_ti.binarypb (OK - compressed)
+46059838 AndroidManifest.xml (OK - compressed)
+46062163 res/anim-v21/fragment_fast_out_extra_slow_in.xml (OK - compressed)
+46062435 res/anim/abc_fade_in.xml (OK - compressed)
+46062706 res/anim/abc_fade_out.xml (OK - compressed)
+46062995 res/anim/abc_grow_fade_in_from_bottom.xml (OK - compressed)
+46063429 res/anim/abc_popup_enter.xml (OK - compressed)
+46063744 res/anim/abc_popup_exit.xml (OK - compressed)
+46064077 res/anim/abc_shrink_fade_out_from_bottom.xml (OK - compressed)
+46064516 res/anim/abc_slide_in_bottom.xml (OK - compressed)
+46064803 res/anim/abc_slide_in_top.xml (OK - compressed)
+46065095 res/anim/abc_slide_out_bottom.xml (OK - compressed)
+46065382 res/anim/abc_slide_out_top.xml (OK - compressed)
+46065670 res/anim/abc_tooltip_enter.xml (OK - compressed)
+46065946 res/anim/abc_tooltip_exit.xml (OK - compressed)
+46066256 res/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml (OK - compressed)
+46066989 res/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml (OK - compressed)
+46067817 res/anim/btn_checkbox_to_checked_icon_null_animation.xml (OK - compressed)
+46068309 res/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml (OK - compressed)
+46069065 res/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml (OK - compressed)
+46069884 res/anim/btn_checkbox_to_unchecked_icon_null_animation.xml (OK - compressed)
+46070365 res/anim/btn_radio_to_off_mtrl_dot_group_animation.xml (OK - compressed)
+46070881 res/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml (OK - compressed)
+46071404 res/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml (OK - compressed)
+46071860 res/anim/btn_radio_to_on_mtrl_dot_group_animation.xml (OK - compressed)
+46072365 res/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml (OK - compressed)
+46072882 res/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml (OK - compressed)
+46073329 res/animator/fragment_close_enter.xml (OK - compressed)
+46073790 res/animator/fragment_close_exit.xml (OK - compressed)
+46074251 res/animator/fragment_fade_enter.xml (OK - compressed)
+46074581 res/animator/fragment_fade_exit.xml (OK - compressed)
+46074912 res/animator/fragment_open_enter.xml (OK - compressed)
+46075365 res/animator/fragment_open_exit.xml (OK - compressed)
+46075845 res/color-v23/abc_btn_colored_borderless_text_material.xml (OK - compressed)
+46076164 res/color-v23/abc_btn_colored_text_material.xml (OK - compressed)
+46076482 res/color-v23/abc_color_highlight_material.xml (OK - compressed)
+46076810 res/color-v23/abc_tint_btn_checkable.xml (OK - compressed)
+46077147 res/color-v23/abc_tint_default.xml (OK - compressed)
+46077582 res/color-v23/abc_tint_edittext.xml (OK - compressed)
+46077933 res/color-v23/abc_tint_seek_thumb.xml (OK - compressed)
+46078237 res/color-v23/abc_tint_spinner.xml (OK - compressed)
+46078590 res/color-v23/abc_tint_switch_track.xml (OK - compressed)
+46078963 res/color/abc_background_cache_hint_selector_material_dark.xml (OK - compressed)
+46079287 res/color/abc_background_cache_hint_selector_material_light.xml (OK - compressed)
+46079595 res/color/abc_hint_foreground_material_dark.xml (OK - compressed)
+46079932 res/color/abc_hint_foreground_material_light.xml (OK - compressed)
+46080278 res/color/abc_primary_text_disable_only_material_dark.xml (OK - compressed)
+46080594 res/color/abc_primary_text_disable_only_material_light.xml (OK - compressed)
+46080896 res/color/abc_primary_text_material_dark.xml (OK - compressed)
+46081199 res/color/abc_primary_text_material_light.xml (OK - compressed)
+46081491 res/color/abc_search_url_text.xml (OK - compressed)
+46081817 res/color/abc_secondary_text_material_dark.xml (OK - compressed)
+46082122 res/color/abc_secondary_text_material_light.xml (OK - compressed)
+46082428 res/color/common_google_signin_btn_text_dark.xml (OK - compressed)
+46082785 res/color/common_google_signin_btn_text_light.xml (OK - compressed)
+46083136 res/color/common_google_signin_btn_tint.xml (OK - compressed)
+46083435 res/color/switch_thumb_material_dark.xml (OK - compressed)
+46083735 res/color/switch_thumb_material_light.xml (OK - compressed)
+46084048 res/drawable-hdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png (OK)
+46084404 res/drawable-hdpi-v4/abc_btn_check_to_on_mtrl_000.png (OK)
+46084716 res/drawable-hdpi-v4/abc_btn_check_to_on_mtrl_015.png (OK)
+46085204 res/drawable-hdpi-v4/abc_btn_radio_to_on_mtrl_000.png (OK)
+46085752 res/drawable-hdpi-v4/abc_btn_radio_to_on_mtrl_015.png (OK)
+46086404 res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png (OK)
+46087588 res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png (OK)
+46088924 res/drawable-hdpi-v4/abc_cab_background_top_mtrl_alpha.9.png (OK)
+46089240 res/drawable-hdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png (OK)
+46089496 res/drawable-hdpi-v4/abc_list_divider_mtrl_alpha.9.png (OK)
+46089744 res/drawable-hdpi-v4/abc_list_focused_holo.9.png (OK)
+46090072 res/drawable-hdpi-v4/abc_list_longpressed_holo.9.png (OK)
+46090368 res/drawable-hdpi-v4/abc_list_pressed_holo_dark.9.png (OK)
+46090660 res/drawable-hdpi-v4/abc_list_pressed_holo_light.9.png (OK)
+46090964 res/drawable-hdpi-v4/abc_list_selector_disabled_holo_dark.9.png (OK)
+46091288 res/drawable-hdpi-v4/abc_list_selector_disabled_holo_light.9.png (OK)
+46091608 res/drawable-hdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png (OK)
+46092436 res/drawable-hdpi-v4/abc_popup_background_mtrl_mult.9.png (OK)
+46093624 res/drawable-hdpi-v4/abc_scrubber_control_off_mtrl_alpha.png (OK)
+46093920 res/drawable-hdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png (OK)
+46094212 res/drawable-hdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png (OK)
+46094572 res/drawable-hdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png (OK)
+46094864 res/drawable-hdpi-v4/abc_scrubber_track_mtrl_alpha.9.png (OK)
+46095144 res/drawable-hdpi-v4/abc_spinner_mtrl_am_alpha.9.png (OK)
+46095576 res/drawable-hdpi-v4/abc_switch_track_mtrl_alpha.9.png (OK)
+46096148 res/drawable-hdpi-v4/abc_tab_indicator_mtrl_alpha.9.png (OK)
+46096428 res/drawable-hdpi-v4/abc_text_select_handle_left_mtrl.png (OK)
+46096796 res/drawable-hdpi-v4/abc_text_select_handle_middle_mtrl.png (OK)
+46097280 res/drawable-hdpi-v4/abc_text_select_handle_right_mtrl.png (OK)
+46097636 res/drawable-hdpi-v4/abc_textfield_activated_mtrl_alpha.9.png (OK)
+46097912 res/drawable-hdpi-v4/abc_textfield_default_mtrl_alpha.9.png (OK)
+46098204 res/drawable-hdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png (OK)
+46098480 res/drawable-hdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png (OK)
+46098740 res/drawable-hdpi-v4/common_full_open_on_phone.png (OK)
+46099532 res/drawable-hdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png (OK)
+46100540 res/drawable-hdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png (OK)
+46101332 res/drawable-hdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png (OK)
+46102404 res/drawable-hdpi-v4/common_google_signin_btn_text_light_normal_background.9.png (OK)
+46103180 res/drawable-hdpi-v4/googleg_disabled_color_18.png (OK)
+46103672 res/drawable-hdpi-v4/googleg_standard_color_18.png (OK)
+46104564 res/drawable-hdpi-v4/notification_bg_low_normal.9.png (OK)
+46104860 res/drawable-hdpi-v4/notification_bg_low_pressed.9.png (OK)
+46105164 res/drawable-hdpi-v4/notification_bg_normal.9.png (OK)
+46105464 res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png (OK)
+46105780 res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png (OK)
+46105976 res/drawable-ldrtl-hdpi-v17/abc_spinner_mtrl_am_alpha.9.png (OK)
+46106412 res/drawable-ldrtl-mdpi-v17/abc_spinner_mtrl_am_alpha.9.png (OK)
+46106820 res/drawable-ldrtl-xhdpi-v17/abc_spinner_mtrl_am_alpha.9.png (OK)
+46107328 res/drawable-ldrtl-xxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png (OK)
+46107948 res/drawable-ldrtl-xxxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png (OK)
+46108472 res/drawable-mdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png (OK)
+46108824 res/drawable-mdpi-v4/abc_btn_check_to_on_mtrl_000.png (OK)
+46109124 res/drawable-mdpi-v4/abc_btn_check_to_on_mtrl_015.png (OK)
+46109528 res/drawable-mdpi-v4/abc_btn_radio_to_on_mtrl_000.png (OK)
+46109936 res/drawable-mdpi-v4/abc_btn_radio_to_on_mtrl_015.png (OK)
+46110380 res/drawable-mdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png (OK)
+46111224 res/drawable-mdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png (OK)
+46112140 res/drawable-mdpi-v4/abc_cab_background_top_mtrl_alpha.9.png (OK)
+46112448 res/drawable-mdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png (OK)
+46112708 res/drawable-mdpi-v4/abc_list_divider_mtrl_alpha.9.png (OK)
+46112956 res/drawable-mdpi-v4/abc_list_focused_holo.9.png (OK)
+46113260 res/drawable-mdpi-v4/abc_list_longpressed_holo.9.png (OK)
+46113556 res/drawable-mdpi-v4/abc_list_pressed_holo_dark.9.png (OK)
+46113848 res/drawable-mdpi-v4/abc_list_pressed_holo_light.9.png (OK)
+46114148 res/drawable-mdpi-v4/abc_list_selector_disabled_holo_dark.9.png (OK)
+46114460 res/drawable-mdpi-v4/abc_list_selector_disabled_holo_light.9.png (OK)
+46114768 res/drawable-mdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png (OK)
+46115396 res/drawable-mdpi-v4/abc_popup_background_mtrl_mult.9.png (OK)
+46116264 res/drawable-mdpi-v4/abc_scrubber_control_off_mtrl_alpha.png (OK)
+46116520 res/drawable-mdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png (OK)
+46116760 res/drawable-mdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png (OK)
+46117048 res/drawable-mdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png (OK)
+46117340 res/drawable-mdpi-v4/abc_scrubber_track_mtrl_alpha.9.png (OK)
+46117616 res/drawable-mdpi-v4/abc_spinner_mtrl_am_alpha.9.png (OK)
+46118028 res/drawable-mdpi-v4/abc_switch_track_mtrl_alpha.9.png (OK)
+46118508 res/drawable-mdpi-v4/abc_tab_indicator_mtrl_alpha.9.png (OK)
+46118784 res/drawable-mdpi-v4/abc_text_select_handle_left_mtrl.png (OK)
+46119076 res/drawable-mdpi-v4/abc_text_select_handle_middle_mtrl.png (OK)
+46119476 res/drawable-mdpi-v4/abc_text_select_handle_right_mtrl.png (OK)
+46119756 res/drawable-mdpi-v4/abc_textfield_activated_mtrl_alpha.9.png (OK)
+46120028 res/drawable-mdpi-v4/abc_textfield_default_mtrl_alpha.9.png (OK)
+46120304 res/drawable-mdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png (OK)
+46120580 res/drawable-mdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png (OK)
+46120868 res/drawable-mdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png (OK)
+46121588 res/drawable-mdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png (OK)
+46122200 res/drawable-mdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png (OK)
+46122928 res/drawable-mdpi-v4/common_google_signin_btn_text_light_normal_background.9.png (OK)
+46123476 res/drawable-mdpi-v4/googleg_disabled_color_18.png (OK)
+46123840 res/drawable-mdpi-v4/googleg_standard_color_18.png (OK)
+46124488 res/drawable-mdpi-v4/notification_bg_low_normal.9.png (OK)
+46124788 res/drawable-mdpi-v4/notification_bg_low_pressed.9.png (OK)
+46125092 res/drawable-mdpi-v4/notification_bg_normal.9.png (OK)
+46125396 res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png (OK)
+46125708 res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png (OK)
+46125896 res/drawable-v21/abc_action_bar_item_background_material.xml (OK - compressed)
+46126123 res/drawable-v21/abc_btn_colored_material.xml (OK - compressed)
+46126755 res/drawable-v21/abc_dialog_material_background.xml (OK - compressed)
+46127151 res/drawable-v21/abc_edit_text_material.xml (OK - compressed)
+46127689 res/drawable-v21/abc_list_divider_material.xml (OK - compressed)
+46128016 res/drawable-v21/notification_action_background.xml (OK - compressed)
+46128568 res/drawable-v23/abc_control_background_material.xml (OK - compressed)
+46128830 res/drawable-watch-v20/abc_dialog_material_background.xml (OK - compressed)
+46129104 res/drawable-xhdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png (OK)
+46129468 res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_000.png (OK)
+46129836 res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png (OK)
+46130352 res/drawable-xhdpi-v4/abc_btn_radio_to_on_mtrl_000.png (OK)
+46131088 res/drawable-xhdpi-v4/abc_btn_radio_to_on_mtrl_015.png (OK)
+46131964 res/drawable-xhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png (OK)
+46133580 res/drawable-xhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png (OK)
+46135404 res/drawable-xhdpi-v4/abc_cab_background_top_mtrl_alpha.9.png (OK)
+46135724 res/drawable-xhdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png (OK)
+46136040 res/drawable-xhdpi-v4/abc_list_divider_mtrl_alpha.9.png (OK)
+46136288 res/drawable-xhdpi-v4/abc_list_focused_holo.9.png (OK)
+46136616 res/drawable-xhdpi-v4/abc_list_longpressed_holo.9.png (OK)
+46136916 res/drawable-xhdpi-v4/abc_list_pressed_holo_dark.9.png (OK)
+46137212 res/drawable-xhdpi-v4/abc_list_pressed_holo_light.9.png (OK)
+46137516 res/drawable-xhdpi-v4/abc_list_selector_disabled_holo_dark.9.png (OK)
+46137848 res/drawable-xhdpi-v4/abc_list_selector_disabled_holo_light.9.png (OK)
+46138176 res/drawable-xhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png (OK)
+46139232 res/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png (OK)
+46140868 res/drawable-xhdpi-v4/abc_scrubber_control_off_mtrl_alpha.png (OK)
+46141232 res/drawable-xhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png (OK)
+46141596 res/drawable-xhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png (OK)
+46142076 res/drawable-xhdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png (OK)
+46142372 res/drawable-xhdpi-v4/abc_scrubber_track_mtrl_alpha.9.png (OK)
+46142656 res/drawable-xhdpi-v4/abc_spinner_mtrl_am_alpha.9.png (OK)
+46143192 res/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png (OK)
+46143896 res/drawable-xhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png (OK)
+46144180 res/drawable-xhdpi-v4/abc_text_select_handle_left_mtrl.png (OK)
+46144608 res/drawable-xhdpi-v4/abc_text_select_handle_middle_mtrl.png (OK)
+46145284 res/drawable-xhdpi-v4/abc_text_select_handle_right_mtrl.png (OK)
+46145696 res/drawable-xhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png (OK)
+46145976 res/drawable-xhdpi-v4/abc_textfield_default_mtrl_alpha.9.png (OK)
+46146264 res/drawable-xhdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png (OK)
+46146548 res/drawable-xhdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png (OK)
+46146812 res/drawable-xhdpi-v4/common_full_open_on_phone.png (OK)
+46147412 res/drawable-xhdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png (OK)
+46148556 res/drawable-xhdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png (OK)
+46149444 res/drawable-xhdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png (OK)
+46150644 res/drawable-xhdpi-v4/common_google_signin_btn_text_light_normal_background.9.png (OK)
+46151536 res/drawable-xhdpi-v4/googleg_disabled_color_18.png (OK)
+46152136 res/drawable-xhdpi-v4/googleg_standard_color_18.png (OK)
+46153204 res/drawable-xhdpi-v4/notification_bg_low_normal.9.png (OK)
+46153512 res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png (OK)
+46153844 res/drawable-xhdpi-v4/notification_bg_normal.9.png (OK)
+46154156 res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png (OK)
+46154492 res/drawable-xhdpi-v4/notify_panel_notification_icon_bg.png (OK)
+46154720 res/drawable-xxhdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png (OK)
+46155092 res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png (OK)
+46155484 res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_015.png (OK)
+46156164 res/drawable-xxhdpi-v4/abc_btn_radio_to_on_mtrl_000.png (OK)
+46157236 res/drawable-xxhdpi-v4/abc_btn_radio_to_on_mtrl_015.png (OK)
+46158536 res/drawable-xxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png (OK)
+46161092 res/drawable-xxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png (OK)
+46164020 res/drawable-xxhdpi-v4/abc_cab_background_top_mtrl_alpha.9.png (OK)
+46164352 res/drawable-xxhdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png (OK)
+46164664 res/drawable-xxhdpi-v4/abc_list_divider_mtrl_alpha.9.png (OK)
+46164916 res/drawable-xxhdpi-v4/abc_list_focused_holo.9.png (OK)
+46165248 res/drawable-xxhdpi-v4/abc_list_longpressed_holo.9.png (OK)
+46165556 res/drawable-xxhdpi-v4/abc_list_pressed_holo_dark.9.png (OK)
+46165856 res/drawable-xxhdpi-v4/abc_list_pressed_holo_light.9.png (OK)
+46166164 res/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_dark.9.png (OK)
+46166520 res/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_light.9.png (OK)
+46166872 res/drawable-xxhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png (OK)
+46168740 res/drawable-xxhdpi-v4/abc_popup_background_mtrl_mult.9.png (OK)
+46171140 res/drawable-xxhdpi-v4/abc_scrubber_control_off_mtrl_alpha.png (OK)
+46171560 res/drawable-xxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png (OK)
+46172060 res/drawable-xxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png (OK)
+46172748 res/drawable-xxhdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png (OK)
+46173048 res/drawable-xxhdpi-v4/abc_scrubber_track_mtrl_alpha.9.png (OK)
+46173340 res/drawable-xxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png (OK)
+46173952 res/drawable-xxhdpi-v4/abc_switch_track_mtrl_alpha.9.png (OK)
+46174892 res/drawable-xxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png (OK)
+46175188 res/drawable-xxhdpi-v4/abc_text_select_handle_left_mtrl.png (OK)
+46175700 res/drawable-xxhdpi-v4/abc_text_select_handle_middle_mtrl.png (OK)
+46176544 res/drawable-xxhdpi-v4/abc_text_select_handle_right_mtrl.png (OK)
+46177060 res/drawable-xxhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png (OK)
+46177352 res/drawable-xxhdpi-v4/abc_textfield_default_mtrl_alpha.9.png (OK)
+46177652 res/drawable-xxhdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png (OK)
+46177940 res/drawable-xxhdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png (OK)
+46178240 res/drawable-xxhdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png (OK)
+46179864 res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png (OK)
+46181116 res/drawable-xxhdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png (OK)
+46182868 res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_normal_background.9.png (OK)
+46184208 res/drawable-xxhdpi-v4/googleg_disabled_color_18.png (OK)
+46185020 res/drawable-xxhdpi-v4/googleg_standard_color_18.png (OK)
+46186548 res/drawable-xxxhdpi-v4/abc_btn_check_to_on_mtrl_000.png (OK)
+46186912 res/drawable-xxxhdpi-v4/abc_btn_check_to_on_mtrl_015.png (OK)
+46187476 res/drawable-xxxhdpi-v4/abc_btn_radio_to_on_mtrl_000.png (OK)
+46188348 res/drawable-xxxhdpi-v4/abc_btn_radio_to_on_mtrl_015.png (OK)
+46189388 res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png (OK)
+46191984 res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png (OK)
+46194900 res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png (OK)
+46195416 res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png (OK)
+46196132 res/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png (OK)
+46196652 res/drawable-xxxhdpi-v4/abc_switch_track_mtrl_alpha.9.png (OK)
+46197556 res/drawable-xxxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png (OK)
+46197848 res/drawable-xxxhdpi-v4/abc_text_select_handle_left_mtrl.png (OK)
+46198452 res/drawable-xxxhdpi-v4/abc_text_select_handle_right_mtrl.png (OK)
+46199039 res/drawable/abc_btn_borderless_material.xml (OK - compressed)
+46199360 res/drawable/abc_btn_check_material.xml (OK - compressed)
+46199664 res/drawable/abc_btn_check_material_anim.xml (OK - compressed)
+46200080 res/drawable/abc_btn_default_mtrl_shape.xml (OK - compressed)
+46200543 res/drawable/abc_btn_radio_material.xml (OK - compressed)
+46200848 res/drawable/abc_btn_radio_material_anim.xml (OK - compressed)
+46201265 res/drawable/abc_cab_background_internal_bg.xml (OK - compressed)
+46201528 res/drawable/abc_cab_background_top_material.xml (OK - compressed)
+46201772 res/drawable/abc_ic_ab_back_material.xml (OK - compressed)
+46202234 res/drawable/abc_ic_arrow_drop_right_black_24dp.xml (OK - compressed)
+46202793 res/drawable/abc_ic_clear_material.xml (OK - compressed)
+46203228 res/drawable/abc_ic_go_search_api_material.xml (OK - compressed)
+46203644 res/drawable/abc_ic_menu_copy_mtrl_am_alpha.xml (OK - compressed)
+46204122 res/drawable/abc_ic_menu_cut_mtrl_alpha.xml (OK - compressed)
+46204752 res/drawable/abc_ic_menu_overflow_material.xml (OK - compressed)
+46205219 res/drawable/abc_ic_menu_paste_mtrl_am_alpha.xml (OK - compressed)
+46205733 res/drawable/abc_ic_menu_selectall_mtrl_alpha.xml (OK - compressed)
+46206279 res/drawable/abc_ic_menu_share_mtrl_alpha.xml (OK - compressed)
+46206866 res/drawable/abc_ic_search_api_material.xml (OK - compressed)
+46207396 res/drawable/abc_ic_voice_search_api_material.xml (OK - compressed)
+46207927 res/drawable/abc_item_background_holo_dark.xml (OK - compressed)
+46208323 res/drawable/abc_item_background_holo_light.xml (OK - compressed)
+46208738 res/drawable/abc_list_selector_background_transition_holo_dark.xml (OK - compressed)
+46209034 res/drawable/abc_list_selector_background_transition_holo_light.xml (OK - compressed)
+46209307 res/drawable/abc_list_selector_holo_dark.xml (OK - compressed)
+46209720 res/drawable/abc_list_selector_holo_light.xml (OK - compressed)
+46210137 res/drawable/abc_ratingbar_indicator_material.xml (OK - compressed)
+46210274 res/drawable/abc_ratingbar_material.xml (OK - compressed)
+46210417 res/drawable/abc_ratingbar_small_material.xml (OK - compressed)
+46210558 res/drawable/abc_seekbar_thumb_material.xml (OK - compressed)
+46210989 res/drawable/abc_seekbar_tick_mark_material.xml (OK - compressed)
+46211307 res/drawable/abc_seekbar_track_material.xml (OK - compressed)
+46211818 res/drawable/abc_spinner_textfield_background_material.xml (OK - compressed)
+46212293 res/drawable/abc_star_black_48dp.xml (OK - compressed)
+46212725 res/drawable/abc_star_half_black_48dp.xml (OK - compressed)
+46213128 res/drawable/abc_switch_thumb_material.xml (OK - compressed)
+46213431 res/drawable/abc_tab_indicator_material.xml (OK - compressed)
+46213734 res/drawable/abc_text_cursor_material.xml (OK - compressed)
+46214051 res/drawable/abc_textfield_search_material.xml (OK - compressed)
+46214404 res/drawable/abc_vector_test.xml (OK - compressed)
+46214809 res/drawable/btn_checkbox_checked_mtrl.xml (OK - compressed)
+46215745 res/drawable/btn_checkbox_checked_to_unchecked_mtrl_animation.xml (OK - compressed)
+46216124 res/drawable/btn_checkbox_unchecked_mtrl.xml (OK - compressed)
+46217050 res/drawable/btn_checkbox_unchecked_to_checked_mtrl_animation.xml (OK - compressed)
+46217417 res/drawable/btn_radio_off_mtrl.xml (OK - compressed)
+46218201 res/drawable/btn_radio_off_to_on_mtrl_animation.xml (OK - compressed)
+46218567 res/drawable/btn_radio_on_mtrl.xml (OK - compressed)
+46219326 res/drawable/btn_radio_on_to_off_mtrl_animation.xml (OK - compressed)
+46219708 res/drawable/common_google_signin_btn_icon_dark.xml (OK - compressed)
+46220057 res/drawable/common_google_signin_btn_icon_dark_focused.xml (OK - compressed)
+46220518 res/drawable/common_google_signin_btn_icon_dark_normal.xml (OK - compressed)
+46220857 res/drawable/common_google_signin_btn_icon_disabled.xml (OK - compressed)
+46221377 res/drawable/common_google_signin_btn_icon_light.xml (OK - compressed)
+46221726 res/drawable/common_google_signin_btn_icon_light_focused.xml (OK - compressed)
+46222186 res/drawable/common_google_signin_btn_icon_light_normal.xml (OK - compressed)
+46222522 res/drawable/common_google_signin_btn_text_dark.xml (OK - compressed)
+46222865 res/drawable/common_google_signin_btn_text_dark_focused.xml (OK - compressed)
+46223326 res/drawable/common_google_signin_btn_text_dark_normal.xml (OK - compressed)
+46223683 res/drawable/common_google_signin_btn_text_disabled.xml (OK - compressed)
+46224212 res/drawable/common_google_signin_btn_text_light.xml (OK - compressed)
+46224560 res/drawable/common_google_signin_btn_text_light_focused.xml (OK - compressed)
+46225019 res/drawable/common_google_signin_btn_text_light_normal.xml (OK - compressed)
+46225348 res/drawable/ic_launcher.png (OK)
+46226539 res/drawable/notification_bg.xml (OK - compressed)
+46226856 res/drawable/notification_bg_low.xml (OK - compressed)
+46227183 res/drawable/notification_icon_background.xml (OK - compressed)
+46227435 res/drawable/notification_tile_bg.xml (OK - compressed)
+46227674 res/drawable/test_level_drawable.xml (OK - compressed)
+46227956 res/drawable/tooltip_frame_dark.xml (OK - compressed)
+46228245 res/drawable/tooltip_frame_light.xml (OK - compressed)
+46228568 res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml (OK - compressed)
+46228856 res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml (OK - compressed)
+46229149 res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml (OK - compressed)
+46229439 res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml (OK - compressed)
+46229726 res/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml (OK - compressed)
+46230012 res/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml (OK - compressed)
+46230269 res/interpolator/fast_out_slow_in.xml (OK - compressed)
+46230551 res/layout-v21/notification_action.xml (OK - compressed)
+46231114 res/layout-v21/notification_action_tombstone.xml (OK - compressed)
+46231733 res/layout-v21/notification_template_custom_big.xml (OK - compressed)
+46232602 res/layout-v21/notification_template_icon_group.xml (OK - compressed)
+46233087 res/layout-v26/abc_screen_toolbar.xml (OK - compressed)
+46233826 res/layout-watch-v20/abc_alert_dialog_button_bar_material.xml (OK - compressed)
+46234381 res/layout-watch-v20/abc_alert_dialog_title_material.xml (OK - compressed)
+46235001 res/layout/abc_action_bar_title_item.xml (OK - compressed)
+46235461 res/layout/abc_action_bar_up_container.xml (OK - compressed)
+46235783 res/layout/abc_action_menu_item_layout.xml (OK - compressed)
+46236244 res/layout/abc_action_menu_layout.xml (OK - compressed)
+46236602 res/layout/abc_action_mode_bar.xml (OK - compressed)
+46236950 res/layout/abc_action_mode_close_item_material.xml (OK - compressed)
+46237450 res/layout/abc_activity_chooser_view.xml (OK - compressed)
+46238126 res/layout/abc_activity_chooser_view_list_item.xml (OK - compressed)
+46238774 res/layout/abc_alert_dialog_button_bar_material.xml (OK - compressed)
+46239455 res/layout/abc_alert_dialog_material.xml (OK - compressed)
+46240365 res/layout/abc_alert_dialog_title_material.xml (OK - compressed)
+46241085 res/layout/abc_cascading_menu_item_layout.xml (OK - compressed)
+46241868 res/layout/abc_dialog_title_material.xml (OK - compressed)
+46242461 res/layout/abc_expanded_menu_layout.xml (OK - compressed)
+46242763 res/layout/abc_list_menu_item_checkbox.xml (OK - compressed)
+46243114 res/layout/abc_list_menu_item_icon.xml (OK - compressed)
+46243566 res/layout/abc_list_menu_item_layout.xml (OK - compressed)
+46244231 res/layout/abc_list_menu_item_radio.xml (OK - compressed)
+46244595 res/layout/abc_popup_menu_header_item_layout.xml (OK - compressed)
+46245097 res/layout/abc_popup_menu_item_layout.xml (OK - compressed)
+46245974 res/layout/abc_screen_content_include.xml (OK - compressed)
+46246333 res/layout/abc_screen_simple.xml (OK - compressed)
+46246810 res/layout/abc_screen_simple_overlay_action_mode.xml (OK - compressed)
+46247267 res/layout/abc_search_dropdown_item_icons_2line.xml (OK - compressed)
+46247997 res/layout/abc_search_view.xml (OK - compressed)
+46249171 res/layout/abc_select_dialog_material.xml (OK - compressed)
+46249765 res/layout/abc_tooltip.xml (OK - compressed)
+46250319 res/layout/custom_dialog.xml (OK - compressed)
+46250711 res/layout/notification_template_part_chronometer.xml (OK - compressed)
+46251048 res/layout/notification_template_part_time.xml (OK - compressed)
+46251384 res/layout/select_dialog_item_material.xml (OK - compressed)
+46251813 res/layout/select_dialog_multichoice_material.xml (OK - compressed)
+46252336 res/layout/select_dialog_singlechoice_material.xml (OK - compressed)
+46252860 res/layout/support_simple_spinner_dropdown_item.xml (OK - compressed)
+46253176 resources.arsc (OK)
+46620175 DebugProbesKt.bin (OK - compressed)
+46621028 META-INF/androidx.activity_activity.version (OK)
+46621124 META-INF/androidx.annotation_annotation-experimental.version (OK)
+46621216 META-INF/androidx.appcompat_appcompat-resources.version (OK)
+46621300 META-INF/androidx.appcompat_appcompat.version (OK)
+46621384 META-INF/androidx.arch.core_core-runtime.version (OK)
+46621460 META-INF/androidx.core_core-ktx.version (OK)
+46621532 META-INF/androidx.core_core.version (OK)
+46621624 META-INF/androidx.cursoradapter_cursoradapter.version (OK)
+46621708 META-INF/androidx.customview_customview.version (OK)
+46621796 META-INF/androidx.drawerlayout_drawerlayout.version (OK)
+46621884 META-INF/androidx.emoji2_emoji2-views-helper.version (OK)
+46621960 META-INF/androidx.emoji2_emoji2.version (OK)
+46622052 META-INF/androidx.exifinterface_exifinterface.version (OK)
+46622132 META-INF/androidx.fragment_fragment.version (OK)
+46622220 META-INF/androidx.interpolator_interpolator.version (OK)
+46622316 META-INF/androidx.lifecycle_lifecycle-livedata-core.version (OK)
+46622408 META-INF/androidx.lifecycle_lifecycle-livedata.version (OK)
+46622500 META-INF/androidx.lifecycle_lifecycle-process.version (OK)
+46622592 META-INF/androidx.lifecycle_lifecycle-runtime.version (OK)
+46622696 META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version (OK)
+46622788 META-INF/androidx.lifecycle_lifecycle-viewmodel.version (OK)
+46622864 META-INF/androidx.loader_loader.version (OK)
+46622948 META-INF/androidx.savedstate_savedstate.version (OK)
+46623036 META-INF/androidx.startup_startup-runtime.version (OK)
+46623116 META-INF/androidx.tracing_tracing.version (OK)
+46623216 META-INF/androidx.vectordrawable_vectordrawable-animated.version (OK)
+46623308 META-INF/androidx.vectordrawable_vectordrawable.version (OK)
+46623412 META-INF/androidx.versionedparcelable_versionedparcelable.version (OK)
+46623496 META-INF/androidx.viewpager_viewpager.version (OK)
+46623576 META-INF/kotlinx_coroutines_android.version (OK)
+46623652 META-INF/kotlinx_coroutines_core.version (OK)
+46623749 META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler (OK - compressed)
+46623896 META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory (OK - compressed)
+46623992 common.properties (OK - compressed)
+46624091 firebase-annotations.properties (OK - compressed)
+46624202 firebase-components.properties (OK - compressed)
+46624315 firebase-encoders-json.properties (OK - compressed)
+46624426 firebase-encoders.properties (OK - compressed)
+46624520 image.properties (OK - compressed)
+46624635 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)
+46625270 kotlin/collections/collections.kotlin_builtins (OK - compressed)
+46626865 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)
+46627092 kotlin/internal/internal.kotlin_builtins (OK - compressed)
+46627703 kotlin/kotlin.kotlin_builtins (OK - compressed)
+46632190 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)
+46633214 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)
+46634499 play-services-base.properties (OK - compressed)
+46634612 play-services-basement.properties (OK - compressed)
+46634749 play-services-mlkit-text-recognition-common.properties (OK - compressed)
+46634900 play-services-mlkit-text-recognition.properties (OK - compressed)
+46635027 play-services-tasks.properties (OK - compressed)
+46635150 text-recognition-bundled-common.properties (OK - compressed)
+46635269 text-recognition.properties (OK - compressed)
+46635370 transport-api.properties (OK - compressed)
+46635476 transport-backend-cct.properties (OK - compressed)
+46635586 transport-runtime.properties (OK - compressed)
+46635688 vision-common.properties (OK - compressed)
+46635788 vision-interfaces.properties (OK - compressed)
+Verification succesful
++ /usr/local/lib/android/sdk/build-tools/35.0.0/apksigner verify --verbose --print-certs android-v049/app/build/outputs/apk/debug/app-debug.apk
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: C=US, O=Android, CN=Android Debug
+Signer #1 certificate SHA-256 digest: b740af51045800bed5640625bd93ab659d95a64edb33fa9427d439de1c7eab02
+Signer #1 certificate SHA-1 digest: b7a2637a37b6a0d2e7320612abd853069eb89d66
+Signer #1 certificate MD5 digest: d1eb8b6a96b4c2196cf426169446bb41
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 0ae8a3f584cff93dd2d90e01a0c2aef3bf3534860280b732243f73cbc43a9365
+Signer #1 public key SHA-1 digest: 7d70ebb988734af74fe7a4b42285abbab03d030d
+Signer #1 public key MD5 digest: 767bc2af9402ea08f1d7c22423026313
++ /usr/local/lib/android/sdk/build-tools/35.0.0/aapt dump badging android-v049/app/build/outputs/apk/debug/app-debug.apk
++ tee badging-v049.txt
+package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+sdkVersion:'26'
+targetSdkVersion:'35'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.CAMERA'
+uses-permission: name='br.com.jeanalan9.controlefiscalpcm.testev049.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
+application-label:'Controle Fiscal PCM'
+application-label-af:'Controle Fiscal PCM'
+application-label-am:'Controle Fiscal PCM'
+application-label-ar:'Controle Fiscal PCM'
+application-label-as:'Controle Fiscal PCM'
+application-label-az:'Controle Fiscal PCM'
+application-label-be:'Controle Fiscal PCM'
+application-label-bg:'Controle Fiscal PCM'
+application-label-bn:'Controle Fiscal PCM'
+application-label-bs:'Controle Fiscal PCM'
+application-label-ca:'Controle Fiscal PCM'
+application-label-cs:'Controle Fiscal PCM'
+application-label-da:'Controle Fiscal PCM'
+application-label-de:'Controle Fiscal PCM'
+application-label-el:'Controle Fiscal PCM'
+application-label-en-AU:'Controle Fiscal PCM'
+application-label-en-CA:'Controle Fiscal PCM'
+application-label-en-GB:'Controle Fiscal PCM'
+application-label-en-IN:'Controle Fiscal PCM'
+application-label-en-XC:'Controle Fiscal PCM'
+application-label-es:'Controle Fiscal PCM'
+application-label-es-US:'Controle Fiscal PCM'
+application-label-et:'Controle Fiscal PCM'
+application-label-eu:'Controle Fiscal PCM'
+application-label-fa:'Controle Fiscal PCM'
+application-label-fi:'Controle Fiscal PCM'
+application-label-fr:'Controle Fiscal PCM'
+application-label-fr-CA:'Controle Fiscal PCM'
+application-label-gl:'Controle Fiscal PCM'
+application-label-gu:'Controle Fiscal PCM'
+application-label-hi:'Controle Fiscal PCM'
+application-label-hr:'Controle Fiscal PCM'
+application-label-hu:'Controle Fiscal PCM'
+application-label-hy:'Controle Fiscal PCM'
+application-label-in:'Controle Fiscal PCM'
+application-label-is:'Controle Fiscal PCM'
+application-label-it:'Controle Fiscal PCM'
+application-label-iw:'Controle Fiscal PCM'
+application-label-ja:'Controle Fiscal PCM'
+application-label-ka:'Controle Fiscal PCM'
+application-label-kk:'Controle Fiscal PCM'
+application-label-km:'Controle Fiscal PCM'
+application-label-kn:'Controle Fiscal PCM'
+application-label-ko:'Controle Fiscal PCM'
+application-label-ky:'Controle Fiscal PCM'
+application-label-lo:'Controle Fiscal PCM'
+application-label-lt:'Controle Fiscal PCM'
+application-label-lv:'Controle Fiscal PCM'
+application-label-mk:'Controle Fiscal PCM'
+application-label-ml:'Controle Fiscal PCM'
+application-label-mn:'Controle Fiscal PCM'
+application-label-mr:'Controle Fiscal PCM'
+application-label-ms:'Controle Fiscal PCM'
+application-label-my:'Controle Fiscal PCM'
+application-label-nb:'Controle Fiscal PCM'
+application-label-ne:'Controle Fiscal PCM'
+application-label-nl:'Controle Fiscal PCM'
+application-label-or:'Controle Fiscal PCM'
+application-label-pa:'Controle Fiscal PCM'
+application-label-pl:'Controle Fiscal PCM'
+application-label-pt:'Controle Fiscal PCM'
+application-label-pt-BR:'Controle Fiscal PCM'
+application-label-pt-PT:'Controle Fiscal PCM'
+application-label-ro:'Controle Fiscal PCM'
+application-label-ru:'Controle Fiscal PCM'
+application-label-si:'Controle Fiscal PCM'
+application-label-sk:'Controle Fiscal PCM'
+application-label-sl:'Controle Fiscal PCM'
+application-label-sq:'Controle Fiscal PCM'
+application-label-sr:'Controle Fiscal PCM'
+application-label-sr-Latn:'Controle Fiscal PCM'
+application-label-sv:'Controle Fiscal PCM'
+application-label-sw:'Controle Fiscal PCM'
+application-label-ta:'Controle Fiscal PCM'
+application-label-te:'Controle Fiscal PCM'
+application-label-th:'Controle Fiscal PCM'
+application-label-tl:'Controle Fiscal PCM'
+application-label-tr:'Controle Fiscal PCM'
+application-label-uk:'Controle Fiscal PCM'
+application-label-ur:'Controle Fiscal PCM'
+application-label-uz:'Controle Fiscal PCM'
+application-label-vi:'Controle Fiscal PCM'
+application-label-zh-CN:'Controle Fiscal PCM'
+application-label-zh-HK:'Controle Fiscal PCM'
+application-label-zh-TW:'Controle Fiscal PCM'
+application-label-zu:'Controle Fiscal PCM'
+application-icon-160:'res/drawable/ic_launcher.png'
+application-icon-240:'res/drawable/ic_launcher.png'
+application-icon-320:'res/drawable/ic_launcher.png'
+application-icon-480:'res/drawable/ic_launcher.png'
+application-icon-640:'res/drawable/ic_launcher.png'
+application: label='Controle Fiscal PCM' icon='res/drawable/ic_launcher.png'
+application-debuggable
+launchable-activity: name='br.com.jeanalan9.controlefiscalpcm.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature-not-required: name='android.hardware.camera'
+  uses-feature-not-required: name='android.hardware.camera.autofocus'
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.screen.portrait'
+  uses-implied-feature: name='android.hardware.screen.portrait' reason='one or more activities have specified a portrait orientation'
+main
+other-activities
+other-receivers
+other-services
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'af' 'am' 'ar' 'as' 'az' 'be' 'bg' 'bn' 'bs' 'ca' 'cs' 'da' 'de' 'el' 'en-AU' 'en-CA' 'en-GB' 'en-IN' 'en-XC' 'es' 'es-US' 'et' 'eu' 'fa' 'fi' 'fr' 'fr-CA' 'gl' 'gu' 'hi' 'hr' 'hu' 'hy' 'in' 'is' 'it' 'iw' 'ja' 'ka' 'kk' 'km' 'kn' 'ko' 'ky' 'lo' 'lt' 'lv' 'mk' 'ml' 'mn' 'mr' 'ms' 'my' 'nb' 'ne' 'nl' 'or' 'pa' 'pl' 'pt' 'pt-BR' 'pt-PT' 'ro' 'ru' 'si' 'sk' 'sl' 'sq' 'sr' 'sr-Latn' 'sv' 'sw' 'ta' 'te' 'th' 'tl' 'tr' 'uk' 'ur' 'uz' 'vi' 'zh-CN' 'zh-HK' 'zh-TW' 'zu'
+densities: '160' '240' '320' '480' '640'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'
++ grep -F 'package: name='\''br.com.jeanalan9.controlefiscalpcm.testev049'\'' versionCode='\''49'\'' versionName='\''0.4.9'\''' badging-v049.txt
+package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
