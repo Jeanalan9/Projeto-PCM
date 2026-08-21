@@ -55,9 +55,33 @@ jobs:
             test -f android-v049/app/build.gradle
           } 2>&1 | tee reconstruct-v049.log
 
+      - name: Validate requested V0.4.9 features
+        id: features
+        if: steps.reconstruct.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          {
+            set -x
+            SRC="android-v049/app/src/main"
+            OCR="$SRC/java/br/com/jeanalan9/controlefiscalpcm/ImportedFiscalOcr.java"
+            MAIN="$SRC/java/br/com/jeanalan9/controlefiscalpcm/MainActivity.java"
+            HTML="$SRC/assets/index.html"
+            test -f "$OCR"
+            test -f "$MAIN"
+            test -f "$HTML"
+            grep -nE "TextRecognition|TextRecognizer" "$OCR"
+            grep -n "ImportedFiscalOcr" "$MAIN"
+            grep -ni "NFS-e" "$OCR" "$MAIN" "$HTML" | head -80 || true
+            grep -niE "position:[[:space:]]*sticky|sticky" "$HTML" | head -80 || true
+            grep -ni "Dados recuperados da nota" "$HTML" | head -20 || true
+            grep -niE "hCaptcha|Consulta oficial|portal oficial" "$MAIN" "$HTML" | head -40 || true
+          } 2>&1 | tee feature-v049.log
+
       - name: Install Android 35
         id: android_sdk
-        if: steps.reconstruct.outcome == 'success'
+        if: steps.reconstruct.outcome == 'success' && steps.features.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
@@ -70,7 +94,7 @@ jobs:
 
       - name: Build debug APK
         id: build_apk
-        if: steps.reconstruct.outcome == 'success' && steps.android_sdk.outcome == 'success'
+        if: steps.reconstruct.outcome == 'success' && steps.features.outcome == 'success' && steps.android_sdk.outcome == 'success'
         continue-on-error: true
         working-directory: android-v049
         shell: bash
@@ -100,6 +124,7 @@ jobs:
         shell: bash
         env:
           RECONSTRUCT_OUTCOME: ${{ steps.reconstruct.outcome }}
+          FEATURES_OUTCOME: ${{ steps.features.outcome }}
           SDK_OUTCOME: ${{ steps.android_sdk.outcome }}
           BUILD_OUTCOME: ${{ steps.build_apk.outcome }}
           VALIDATE_OUTCOME: ${{ steps.validate_apk.outcome }}
@@ -107,14 +132,17 @@ jobs:
           set -euxo pipefail
           rm -rf dist-v049
           mkdir -p dist-v049
-          printf 'reconstruct=%s\nsdk=%s\nbuild=%s\nvalidate=%s\ncommit=%s\n' "$RECONSTRUCT_OUTCOME" "$SDK_OUTCOME" "$BUILD_OUTCOME" "$VALIDATE_OUTCOME" "$GITHUB_SHA" > dist-v049/STATUS.txt
-          for f in reconstruct-v049.log android-sdk-v049.log build-v049.log validate-v049.log badging-v049.txt; do
+          printf 'reconstruct=%s\nfeatures=%s\nsdk=%s\nbuild=%s\nvalidate=%s\ncommit=%s\n' "$RECONSTRUCT_OUTCOME" "$FEATURES_OUTCOME" "$SDK_OUTCOME" "$BUILD_OUTCOME" "$VALIDATE_OUTCOME" "$GITHUB_SHA" > dist-v049/STATUS.txt
+          for f in reconstruct-v049.log feature-v049.log android-sdk-v049.log build-v049.log validate-v049.log badging-v049.txt; do
             test -f "$f" && cp "$f" dist-v049/ || true
           done
           APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
           if [ -f "$APK" ]; then
             cp "$APK" dist-v049/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk
             sha256sum dist-v049/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk > dist-v049/SHA256SUMS.txt
+          fi
+          if [ -d android-v049 ]; then
+            (cd android-v049 && zip -qr ../dist-v049/Controle_Fiscal_PCM_V0.4.9_Codigo_Fonte.zip . -x 'app/build/*' '.gradle/*' 'build/*')
           fi
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
@@ -132,6 +160,6 @@ jobs:
           retention-days: 7
 
       - name: Enforce successful build and validation
-        if: steps.reconstruct.outcome != 'success' || steps.android_sdk.outcome != 'success' || steps.build_apk.outcome != 'success' || steps.validate_apk.outcome != 'success'
+        if: steps.reconstruct.outcome != 'success' || steps.features.outcome != 'success' || steps.android_sdk.outcome != 'success' || steps.build_apk.outcome != 'success' || steps.validate_apk.outcome != 'success'
         shell: bash
         run: exit 1
