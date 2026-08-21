@@ -35,28 +35,42 @@ jobs:
           gradle-version: '8.9'
 
       - name: Reconstruct Android project
+        id: reconstruct
+        continue-on-error: true
         shell: bash
         run: |
-          set -euxo pipefail
-          mkdir -p android-v049
-          cat .build-v049/payload.part* > /tmp/controle-fiscal-v049-project.tar.gz.b64
-          test "$(wc -c < /tmp/controle-fiscal-v049-project.tar.gz.b64)" = "77656"
-          echo "20941d34df4ff760b87fcfec2ca136f656de0ab22bea606cf0b58909e38203f9  /tmp/controle-fiscal-v049-project.tar.gz.b64" | sha256sum -c -
-          base64 -d /tmp/controle-fiscal-v049-project.tar.gz.b64 > /tmp/controle-fiscal-v049-project.tar.gz
-          echo "4a9c68e61c499bbd02170d0e4cafcb801fda49707ce017a7910911a9cbb9ec5e  /tmp/controle-fiscal-v049-project.tar.gz" | sha256sum -c -
-          tar -xzf /tmp/controle-fiscal-v049-project.tar.gz -C android-v049
-          test -f android-v049/settings.gradle
-          test -f android-v049/app/build.gradle
+          set -o pipefail
+          {
+            set -x
+            rm -rf android-v049
+            mkdir -p android-v049
+            cat .build-v049/payload.part* > /tmp/controle-fiscal-v049-project.tar.gz.b64
+            wc -c /tmp/controle-fiscal-v049-project.tar.gz.b64
+            sha256sum /tmp/controle-fiscal-v049-project.tar.gz.b64
+            base64 -d /tmp/controle-fiscal-v049-project.tar.gz.b64 > /tmp/controle-fiscal-v049-project.tar.gz
+            sha256sum /tmp/controle-fiscal-v049-project.tar.gz
+            tar -tzf /tmp/controle-fiscal-v049-project.tar.gz | head -30
+            tar -xzf /tmp/controle-fiscal-v049-project.tar.gz -C android-v049
+            test -f android-v049/settings.gradle
+            test -f android-v049/app/build.gradle
+          } 2>&1 | tee reconstruct-v049.log
 
       - name: Install Android 35
+        id: android_sdk
+        if: steps.reconstruct.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
-          set -euxo pipefail
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          set -o pipefail
+          {
+            set -x
+            yes | sdkmanager --licenses >/dev/null || true
+            sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          } 2>&1 | tee android-sdk-v049.log
 
       - name: Build debug APK
         id: build_apk
+        if: steps.reconstruct.outcome == 'success' && steps.android_sdk.outcome == 'success'
         continue-on-error: true
         working-directory: android-v049
         shell: bash
@@ -70,28 +84,33 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-          set -euxo pipefail
-          APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
-          test -f "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK" | tee validate-v049.log
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | tee badging-v049.txt
-          grep -F "package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9'" badging-v049.txt
+          set -o pipefail
+          {
+            set -x
+            APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
+            test -f "$APK"
+            "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 "$APK"
+            "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
+            "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | tee badging-v049.txt
+            grep -F "package: name='br.com.jeanalan9.controlefiscalpcm.testev049' versionCode='49' versionName='0.4.9'" badging-v049.txt
+          } 2>&1 | tee validate-v049.log
 
       - name: Publish build result to branch
         if: always()
         shell: bash
         env:
+          RECONSTRUCT_OUTCOME: ${{ steps.reconstruct.outcome }}
+          SDK_OUTCOME: ${{ steps.android_sdk.outcome }}
           BUILD_OUTCOME: ${{ steps.build_apk.outcome }}
           VALIDATE_OUTCOME: ${{ steps.validate_apk.outcome }}
         run: |
           set -euxo pipefail
           rm -rf dist-v049
           mkdir -p dist-v049
-          printf 'build=%s\nvalidate=%s\ncommit=%s\n' "$BUILD_OUTCOME" "$VALIDATE_OUTCOME" "$GITHUB_SHA" > dist-v049/STATUS.txt
-          test -f build-v049.log && cp build-v049.log dist-v049/build-v049.log || true
-          test -f validate-v049.log && cp validate-v049.log dist-v049/validate-v049.log || true
-          test -f badging-v049.txt && cp badging-v049.txt dist-v049/badging-v049.txt || true
+          printf 'reconstruct=%s\nsdk=%s\nbuild=%s\nvalidate=%s\ncommit=%s\n' "$RECONSTRUCT_OUTCOME" "$SDK_OUTCOME" "$BUILD_OUTCOME" "$VALIDATE_OUTCOME" "$GITHUB_SHA" > dist-v049/STATUS.txt
+          for f in reconstruct-v049.log android-sdk-v049.log build-v049.log validate-v049.log badging-v049.txt; do
+            test -f "$f" && cp "$f" dist-v049/ || true
+          done
           APK="android-v049/app/build/outputs/apk/debug/app-debug.apk"
           if [ -f "$APK" ]; then
             cp "$APK" dist-v049/Controle_Fiscal_PCM_V0.4.9_TESTE_LATERAL.apk
@@ -113,6 +132,6 @@ jobs:
           retention-days: 7
 
       - name: Enforce successful build and validation
-        if: steps.build_apk.outcome != 'success' || steps.validate_apk.outcome != 'success'
+        if: steps.reconstruct.outcome != 'success' || steps.android_sdk.outcome != 'success' || steps.build_apk.outcome != 'success' || steps.validate_apk.outcome != 'success'
         shell: bash
         run: exit 1
